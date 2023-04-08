@@ -3,7 +3,7 @@
 
 Written in Lazarus 2.0, Free Pascal 3.2.0.
 
-![CudaText](https://cudatext.github.io/img/cudatext-python-intel.gif)
+![CudaText](https://user-images.githubusercontent.com/451833/230739372-91af9cf2-cf65-4b47-a44b-0eca70631acf.png)
 
 ## Installing from source
 ```
