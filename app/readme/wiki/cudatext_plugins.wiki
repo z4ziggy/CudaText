@@ -271,9 +271,10 @@ Dialog of Snippets plugin:
 
 Texts of snippets usually have tab-stop(s), e.g. ${1:some_text}. Plugin Snippets finds tab-stops and places "markers" for them. After markers are placed, Tab-key works specially: it jumps to the next marker. See detailed information in the [[CudaText#Markers]].
 
-Formats of snippets supported:
-* CudaText snippets. These are packages with prefix "snippets_ct" in the Addons Manager. They are installed into folder [CudaText]/data/snippets_ct.
-* VSCode snippets. These are VSCode packages located in the VSCode repositories. Read the separate topic about them below. They are installed to folder [CudaText]/data/snippets_vs.
+Plugin supports two snippets folder, but formats of data are the same, VSCode JSON format:
+
+* CudaText snippets. These are packages with prefix "snippets_ct" in the Addons Manager. They are installed into folder CudaText/data/snippets_ct.
+* VSCode snippets. These are VSCode packages located in the VSCode repositories. Read the separate topic about them below. They are installed to folder CudaText/data/snippets_vs.
 
 === Snippets from VSCode ===
 Since recent versions, Snippets plugin supports snippets from VSCode editor. It gives menu items in "Plugins / Snippets":
@@ -371,41 +372,6 @@ For inserting the current date and time:
 * $CURRENT_MINUTE - The current minute
 * $CURRENT_SECOND - The current second
 * $CURRENT_SECONDS_UNIX - The number of seconds since the Unix epoch
-
-====Snippets file names====
-
-Snippets are stored in separate files with extensions:
-
-* .cuda-snippet or .synw-snippet: main format.
-* .cuda-snips: compact format for collections of tiny snippets.
-
-Encoding is UTF-8, no BOM. Files can be placed in any subfolder of "data/snippets" folder, file/folder names have no meaning, but it's recommended to name subfolders like AuthorName.SyntaxName, so users can easily find newly installed snippets.
-
-====Format of .cuda-snippet====
-
-First lines have format "key=value" (no spaces around "="), where "key" is one of strings:
-
-* "name": snippet full name, shown in dialog.
-* "id": snippet short alias for Tab-key (latin letters, digits, "_.$"), line is optional.
-* "lex": lexers list, comma-separated, for which snippet is active, line is optional, empty means snippet always active.
-
-Then follows the line "text=" without value, and all next lines - are snippet contents.
-
-* Trailing blank lines are discarded.
-* Use tab-chars in text indents, they are auto replaced to spaces if current editor configured so.
-
-====Format of .cuda-snips====
-
-File contains one or several lines, one snippet per line. Empty lines, lines starting with "#" or space, are ignored. Format of lines:
-
-* id text
-* /N=name text
-* id /N=name text
-* id /L=lexers text
-* id /L=lexers /N=name text
-* id /L="lexers" /N="name" text
-
-Here "id" is short alias for Tab-key, "name" (if not set, it's the same as "id") is full name for dialog, "lexers" is comma-separated lexer list, "text" is snippet contents. Contents can have escaped special chars: "\n", "\r", "\t" (tab-char), "\\" (backslash).
 
 == Snippet Panel ==
 
