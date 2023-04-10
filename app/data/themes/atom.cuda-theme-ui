@@ -11,7 +11,7 @@
   "EdMarkers" : "#BDAE93",
   "EdCurLineBg" : "#2C313A",
   "EdIndentVLine" : "#282C34",
-  "EdUnprintFont" : "#282C34",
+  "EdUnprintFont" : "#000000",
   "EdUnprintBg" : "#1D2021",
   "EdUnprintHexFont" : "#504945",
   "EdMinimapBorder" : "#303030",
