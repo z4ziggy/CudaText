@@ -5329,6 +5329,9 @@ begin
   PythonIO.RawOutput:= False;
 
   PythonEng:= TPythonEngine.Create(Self);
+  {$ifdef LCLGTK2}
+  PythonEng.AutoFinalize:= false;
+  {$endif}
   PythonEng.AutoLoad:= false;
   PythonEng.FatalAbort:= false;
   PythonEng.FatalMsgDlg:= false;
