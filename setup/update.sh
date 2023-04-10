@@ -10,8 +10,9 @@ for r in `git submodule status | grep '^+' | cut -f2 -d' '`; do
 `git submodule summary $r | tail -n +2`"
 done
 
+# git remote add upstream https://github.com/Alexey-T/CudaText.git
 # update upstream
-git pull upstream master
+git pull --no-edit upstream master
 
 # run the build script
 bash "$(dirname -- "${BASH_SOURCE[0]}")"/build.sh
