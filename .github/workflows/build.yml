@@ -65,5 +65,13 @@ jobs:
     - name: Archive dist/ folder
       uses: actions/upload-artifact@v3
       with:
-        name: CudaTextApp
+        name: CudaText-latest
         path: dist
+    - name: Download dist/
+      uses: actions/download-artifact@v3
+      with:
+        name: CudaText-latest
+        path: dist/
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: dist/
