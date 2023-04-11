@@ -45,7 +45,6 @@ jobs:
         EOF
     - name: Build the components
       run: |
-        cat /tmp/miscellaneousoptions.xml
         lazbuild --pcp=/tmp/ -B "comp/bgrabitmap/bgrabitmap/bgrabitmappack.lpk"
         lazbuild --pcp=/tmp/ -B "comp/EncConv/encconv/encconv_package.lpk"
         lazbuild --pcp=/tmp/ -B "comp/ATBinHex-Lazarus/atbinhex/atbinhex_package.lpk"
@@ -58,3 +57,13 @@ jobs:
         lazbuild --pcp=/tmp/ -B "comp/Emmet-Pascal/emmet/emmet_package.lpk"
     - name: Build the CudaText Application
       run: lazbuild --pcp=/tmp/ -B "app/cudatext.lpr"
+    - name: Package latest CudaText to dist/ folder
+      run: |
+        cd setup
+        echo "cuda_ver=latest" > cuda_ver.sh
+        ./unix_common.sh linux gtk2 x86_64 . ../dist
+    - name: Archive dist/ folder
+      uses: actions/upload-artifact@v3
+        with:
+          name: CudaTextApp
+            path: dist
