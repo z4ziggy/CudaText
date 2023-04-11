@@ -64,6 +64,6 @@ jobs:
         ./unix_common.sh linux gtk2 x86_64 . ../dist
     - name: Archive dist/ folder
       uses: actions/upload-artifact@v3
-        with:
-          name: CudaTextApp
-            path: dist
+      with:
+        name: CudaTextApp
+        path: dist
