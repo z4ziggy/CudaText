@@ -272,7 +272,7 @@ begin
     Ed.OptMinimapAtLeft:= Op.OpMinimapAtLeft;
     Ed.OptMinimapCustomScale:= Op.OpMinimapScale;
     Ed.OptMinimapTooltipVisible:= Op.OpMinimapTooltipShow;
-    Ed.OptMinimapTooltipLinesCount:= Op.OpMinimapTooltipLineCount;
+    Ed.OptMinimapTooltipHeight:= Op.OpMinimapTooltipHeight;
     Ed.OptMinimapTooltipWidthPercents:= Op.OpMinimapTooltipWidth;
     Ed.OptMinimapTooltipFontSize:= Op.OpMinimapTooltipFontSize;
     Ed.OptMinimapDragImmediately:= Op.OpMinimapDragImmediately;
@@ -2696,6 +2696,7 @@ begin
     if ACharsTyped>=Ed.OptAutocompleteAutoshowCharCount then
     begin
       //ACharsTyped:= 0; //don't reset, fix #4479
+      Application.ProcessMessages; //give time to lexer-parser, to fix https://github.com/CudaText-addons/cuda_lsp/issues/137
       AppRunAutocomplete(Ed, true);
       exit;
     end;

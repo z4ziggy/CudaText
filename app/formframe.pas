@@ -2786,8 +2786,11 @@ procedure TEditorFrame.DoFileOpen_Ex(Ed: TATSynEdit; const AFileName: string;
   AAllowLoadHistory, AAllowLoadHistoryEnc, AAllowLoadBookmarks, AAllowLexerDetect,
   AAllowErrorMsgBox, AKeepScroll, AAllowLoadUndo: boolean; AOpenMode: TAppOpenMode);
 var
+  St: TATStrings;
   NFileSize: Int64;
+  LoadOptions: TATLoadStreamOptions;
 begin
+  St:= Ed.Strings;
   FProgressForm:= nil;
   if not AppFormShowCompleted then
   begin
@@ -2800,8 +2803,8 @@ begin
           NFileSize div (1024*1024)
           ]));
       FProgressOldProgress:= 0;
-      FProgressOldHandler:= Ed.Strings.OnProgress;
-      Ed.Strings.OnProgress:= @HandleStringsProgress;
+      FProgressOldHandler:= St.OnProgress;
+      St.OnProgress:= @HandleStringsProgress;
       FProgressForm.Show;
       Application.ProcessMessages;
     end;
@@ -2809,16 +2812,20 @@ begin
 
   try
     try
+      LoadOptions:= [];
       if AKeepScroll then
-        Ed.Strings.EncodingDetect:= false;
-      Ed.LoadFromFile(AFileName, AKeepScroll);
-      Ed.Strings.EncodingDetect:= true;
+      begin
+        St.EncodingDetect:= false;
+        Include(LoadOptions, cLoadOpKeepScroll);
+      end;
+      Ed.LoadFromFile(AFileName, LoadOptions);
+      St.EncodingDetect:= true;
       SetFileName(Ed, AFileName);
       UpdateCaptionFromFilename;
     finally
       if Assigned(FProgressForm) then
       begin
-        Ed.Strings.OnProgress:= FProgressOldHandler;
+        St.OnProgress:= FProgressOldHandler;
         FProgressForm.Free;
         FProgressForm:= nil;
         FProgressGauge:= nil;
@@ -2836,7 +2843,7 @@ begin
   end;
 
   //turn off opts for huge files
-  FileWasBig[Ed]:= Ed.Strings.Count>EditorOps.OpWrapEnabledMaxLines;
+  FileWasBig[Ed]:= St.Count>EditorOps.OpWrapEnabledMaxLines;
 
   if AAllowLoadUndo then
     DoLoadUndo(Ed);
@@ -3088,19 +3095,33 @@ end;
 
 procedure TEditorFrame.DoFileReload_DisableDetectEncoding(Ed: TATSynEdit);
 var
+  St: TATStrings;
   SFileName: string;
+  LoadOptions: TATLoadStreamOptions;
 begin
+  St:= Ed.Strings;
   SFileName:= GetFileName(Ed);
   if SFileName='' then exit;
+
   if Ed.Modified then
     if MsgBox(
       Format(msgConfirmReopenModifiedTab, [AppCollapseHomeDirInFilename(SFileName)]),
       MB_OKCANCEL or MB_ICONWARNING
       ) <> ID_OK then exit;
 
-  Ed.Strings.EncodingDetect:= false;
-  Ed.Strings.LoadFromFile(SFileName);
-  Ed.Strings.EncodingDetect:= true;
+  LoadOptions:= [];
+  if St.Encoding=cEncUTF8 then
+    Include(LoadOptions, cLoadOpAllowBadCharsOfLen1);
+
+  Locked:= true;
+  try
+    St.EncodingDetect:= false;
+    St.LoadFromFile(SFileName, LoadOptions);
+    St.EncodingDetect:= true;
+  finally
+    Locked:= false;
+  end;
+
   UpdateEds(true);
 end;
 
@@ -3824,6 +3845,7 @@ procedure TEditorFrame.DoLoadHistoryEx(Ed: TATSynEdit; c: TJsonConfig;
 var
   str, str0, sFileName, sCaretString: string;
   Caret: TATCaretItem;
+  LoadOptions: TATLoadStreamOptions;
   NCaretPosX, NCaretPosY,
   NCaretEndX, NCaretEndY: integer;
   nTop, i: integer;
@@ -3888,8 +3910,11 @@ begin
       if sFileName<>'' then
         if not Ed.Modified then
         begin
+          LoadOptions:= [];
+          if Ed.Strings.Encoding=cEncUTF8 then
+            Include(LoadOptions, cLoadOpAllowBadCharsOfLen1);
           Ed.Strings.EncodingDetect:= false;
-          Ed.LoadFromFile(sFileName);
+          Ed.LoadFromFile(sFileName, LoadOptions);
           Ed.Strings.EncodingDetect:= true;
         end;
     end;
