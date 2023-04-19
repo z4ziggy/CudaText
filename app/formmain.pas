@@ -741,7 +741,6 @@ type
     procedure FindAndExtractRegexMatches;
     function GetFileOpenOptionsString(AFileCount: integer): string;
     procedure HandleTimerCommand(Ed: TATSynEdit; CmdCode: integer; CmdInvoke: TATEditorCommandInvoke);
-    function IsFrameInMainWindow(Frame: TEditorFrame): boolean;
     function IsTooManyTabsOpened: boolean;
     function GetUntitledNumberedCaption: string;
     procedure PopupBottomOnPopup(Sender: TObject);
@@ -765,6 +764,7 @@ type
     procedure CodeTreeFilter_OnCommand(Sender: TObject; ACmd: integer; AInvoke: TATEditorCommandInvoke;
       const AText: string; var AHandled: boolean);
     procedure DisablePluginMenuItems(AddFindLibraryItem: boolean);
+    procedure DoShowForVisibleFrames;
     procedure DoLocalizeTabTitles;
     procedure DoApplyCli(const ACliModule: string; const ACliParams: TAppStringArray);
     procedure DoApplyNewdocLexer(F: TEditorFrame);
@@ -1000,7 +1000,6 @@ type
     procedure DoOps_LoadOptions(const AFileName: string; var Ops: TEditorOps; AllowGlobalOps: boolean);
     procedure DoOps_LoadOptionsFromString(const AString: string);
     procedure DoOps_FindPythonLib(Sender: TObject);
-    procedure DoEditorsLock(ALock: boolean);
     procedure DoFindCurrentWordOrSel(Ed: TATSynEdit; ANext, AWordOrSel: boolean);
     procedure DoDialogCommands;
     function DoDialogCommands_Custom(Ed: TATSynEdit; const AProps: TDlgCommandsProps): integer;
@@ -3495,19 +3494,6 @@ procedure TfmMain.FormShow(Sender: TObject);
       Frame.SetFocus;
   end;
   //
-  procedure _Init_FramesOnShow;
-  var
-    Frame: TEditorFrame;
-    i: integer;
-  begin
-    for i:= 0 to FrameCount-1 do
-    begin
-      Frame:= Frames[i];
-      if Frame.Visible then
-        Frame.DoShow;
-    end;
-  end;
-  //
   procedure _Init_ShowStartupTimes;
   var
     NTick: QWord;
@@ -3629,7 +3615,7 @@ begin
 
   //postpone parsing until frames are shown
   AppAllowFrameParsing:= true;
-  _Init_FramesOnShow;
+  DoShowForVisibleFrames;
 
   FHandledUntilFirstFocus:= true;
 
@@ -6329,15 +6315,6 @@ end;
 procedure TfmMain.SetShowTabsMain(AValue: boolean);
 begin
   Groups.SetTabOption(tabOptionShowTabs, Ord(AValue));
-end;
-
-
-procedure TfmMain.DoEditorsLock(ALock: boolean);
-var
-  i: integer;
-begin
-  for i:= 0 to FrameCount-1 do
-    Frames[i].Locked:= ALock;
 end;
 
 procedure TfmMain.DoFileNewFrom(const fn: string);
@@ -9106,16 +9083,19 @@ begin
     mnuEditCopyAppend.Enabled:= bSel;
 end;
 
-function TfmMain.IsFrameInMainWindow(Frame: TEditorFrame): boolean;
-var
-  FGroups: TATGroups;
-  FPages: TATPages;
-  NLocalGroupIndex, NGlobalGroupIndex, NTabIndex: integer;
-begin
-  GetFrameLocation(Frame, FGroups, FPages, NLocalGroupIndex, NGlobalGroupIndex, NTabIndex);
-  Result:= FGroups=Self.Groups;
-end;
 
+procedure TfmMain.DoShowForVisibleFrames;
+var
+  Frame: TEditorFrame;
+  i: integer;
+begin
+  for i:= 0 to FrameCount-1 do
+  begin
+    Frame:= Frames[i];
+    if Frame.Visible then
+      Frame.DoShow;
+  end;
+end;
 
 //----------------------------
 {$I formmain_loadsave.inc}
