@@ -996,12 +996,6 @@ begin
   UpdateMenuItemHotkey(mnuViewMinimap, cCommand_ToggleMinimap);
   UpdateMenuItemHotkey(mnuViewMicromap, cCommand_ToggleMicromap);
 
-  UpdateMenuItemHotkey(mnuViewUnpriShow, cCommand_ToggleUnprinted);
-  UpdateMenuItemHotkey(mnuViewUnpriSpaces, cCommand_ToggleUnprintedSpaces);
-  UpdateMenuItemHotkey(mnuViewUnpriSpacesTail, cCommand_ToggleUnprintedSpacesTrailing);
-  UpdateMenuItemHotkey(mnuViewUnpriEnds, cCommand_ToggleUnprintedEnds);
-  UpdateMenuItemHotkey(mnuViewUnpriEndsDet, cCommand_ToggleUnprintedEndDetails);
-
   UpdateMenuItemHotkey(mnuViewFullscr, cmd_ToggleFullScreen);
   UpdateMenuItemHotkey(mnuViewDistFree, cmd_ToggleDistractionFree);
   UpdateMenuItemHotkey(mnuViewSidebar, cmd_ToggleSidebar);
@@ -1018,7 +1012,6 @@ begin
   UpdateMenuItemHotkey(mnuOpUser, cmd_OpsOpenUser);
   UpdateMenuItemHotkey(mnuOpDefaultUser, cmd_OpsOpenDefaultAndUser);
   UpdateMenuItemHotkey(mnuOpLexer, cmd_OpsOpenLexerSpecific);
-  //UpdateMenuItemHotkey(mnuOpKeys, cmd_HelpHotkeys);
 
   UpdateMenuItemHotkey(mnuFontText, cmd_OpsFontText);
   UpdateMenuItemHotkey(mnuFontUi, cmd_OpsFontUi);
@@ -1029,6 +1022,7 @@ begin
   UpdateMenuItemHotkey(mnuOpLexMap, cmd_DialogLexerStyleMap);
   UpdateMenuItemHotkey(mnuOpThemeUi, cmd_DialogThemeUi);
   UpdateMenuItemHotkey(mnuOpThemeSyntax, cmd_DialogThemeSyntax);
+  UpdateMenuItemHotkey(mnuOpUnprinted, cmd_DialogUnprinted);
   UpdateMenuItemHotkey(mnuOpThemes, cmd_ChooseThemeUI);
   UpdateMenuItemHotkey(mnuOpLangs, cmd_ChooseTranslation);
 
@@ -1086,12 +1080,6 @@ begin
   UpdateMenuItemChecked(mnuViewRuler, mnuViewRuler_Alt, Ed.OptRulerVisible);
   UpdateMenuItemChecked(mnuViewMinimap, mnuViewMinimap_Alt, Ed.OptMinimapVisible);
   UpdateMenuItemChecked(mnuViewMicromap, mnuViewMicromap_Alt, Ed.OptMicromapVisible);
-
-  UpdateMenuItemChecked(mnuViewUnpriShow, mnuViewUnpriShow_Alt, Ed.OptUnprintedVisible);
-  UpdateMenuItemChecked(mnuViewUnpriSpaces, mnuViewUnpriSpaces_Alt, Ed.OptUnprintedSpaces);
-  UpdateMenuItemChecked(mnuViewUnpriSpacesTail, mnuViewUnpriSpacesTail_Alt, Ed.OptUnprintedSpacesTrailing);
-  UpdateMenuItemChecked(mnuViewUnpriEnds, mnuViewUnpriEnds_Alt, Ed.OptUnprintedEnds);
-  UpdateMenuItemChecked(mnuViewUnpriEndsDet, mnuViewUnpriEndsDet_Alt, Ed.OptUnprintedEndsDetails);
 end;
 
 procedure TfmMain.UpdateMenuChecks_Global;

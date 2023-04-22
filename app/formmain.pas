@@ -121,6 +121,7 @@ uses
   form_menu_py,
   form_addon_report,
   form_choose_theme,
+  form_unprinted,
   Math;
 
 type
@@ -241,6 +242,7 @@ type
   { TfmMain }
   TfmMain = class(TForm)
     AppProps: TApplicationProperties;
+    mnuOpUnprinted: TMenuItem;
     mnuEditPasteHist: TMenuItem;
     mnuEditPasteIndent: TMenuItem;
     mnuViewSplitNo: TMenuItem;
@@ -264,7 +266,6 @@ type
     mnuSelExtWord: TMenuItem;
     mnuViewOnTop: TMenuItem;
     mnuOpPlugins: TMenuItem;
-    mnuViewUnpriSpacesTail: TMenuItem;
     mnuViewMicromap: TMenuItem;
     mnuHelpCheckUpd: TMenuItem;
     MenuItem4: TMenuItem;
@@ -410,12 +411,6 @@ type
     mnuViewWrap: TMenuItem;
     mnuViewMinimap: TMenuItem;
     mnuViewSplitSub: TMenuItem;
-    MenuItem10: TMenuItem;
-    mnuViewUnpriShow: TMenuItem;
-    mnuViewUnpriSpaces: TMenuItem;
-    mnuViewUnpriEnds: TMenuItem;
-    mnuViewUnpriEndsDet: TMenuItem;
-    mnuViewUnpri: TMenuItem;
     mnuHelp: TMenuItem;
     mnuView: TMenuItem;
     mnuViewBottom: TMenuItem;
@@ -773,6 +768,7 @@ type
     procedure DoClearSingleFirstTab;
     function DoCloseAllTabs(AClosePinned: boolean): boolean;
     procedure DoCloseAllTabs_Old;
+    procedure DoDialogUnprinted(Ed: TATSynEdit);
     procedure DoDialogMenuThemes_ThemeSetter(const AThemeUi, AThemeSyntax: string);
     procedure DoFileDialog_PrepareDir(Dlg: TFileDialog);
     procedure DoFileDialog_SaveDir(Dlg: TFileDialog);
@@ -9095,6 +9091,48 @@ begin
     Frame:= Frames[i];
     if Frame.Visible then
       Frame.DoShow;
+  end;
+end;
+
+procedure TfmMain.DoDialogUnprinted(Ed: TATSynEdit);
+var
+  Form: TfmUnprinted;
+  Symbol: TATEditorUnptintedEolSymbol;
+begin
+  Symbol:= ATEditorOptions.UnprintedEndSymbol;
+
+  Form:= TfmUnprinted.Create(nil);
+  try
+    EditorApplyTheme(Form.EdPreview);
+
+    Form.OnSaveOptionBool:= @DoOps_SaveOptionBool;
+    Form.OnSaveOptionString:= @DoOps_SaveOptionString;
+
+    Form.chkVisible.Checked:= Ed.OptUnprintedVisible;
+    Form.chkShowWhitespace.Checked:= Ed.OptUnprintedSpaces;
+    Form.chkOnlyTrail.Checked:= Ed.OptUnprintedSpacesTrailing;
+    Form.chkOnlyLeadAndTrail.Checked:= Ed.OptUnprintedSpacesBothEnds;
+    Form.chkOnlyInSel.Checked:= Ed.OptUnprintedSpacesOnlyInSelection;
+    Form.chkAlsoInSel.Checked:= Ed.OptUnprintedSpacesAlsoInSelection;
+    Form.chkForceShowTabs.Checked:= Ed.OptUnprintedForceTabs;
+    Form.chkShowEndMarks.Checked:= Ed.OptUnprintedEnds;
+    case Symbol of
+      aeueDot:
+        Form.chkEndDot.Checked:= true;
+      aeueArrowDown:
+        Form.chkEndArrow.Checked:= true;
+      aeuePilcrow:
+        Form.chkEndPilcrow.Checked:= true;
+    end;
+    Form.chkEndDetails.Checked:= Ed.OptUnprintedEndsDetails;
+
+    if Form.ShowModal=mrOk then
+    begin
+      Form.ApplyToEditor(Ed);
+      UpdateToolbarButtons(CurrentFrame);
+    end;
+  finally
+    FreeAndNil(Form);
   end;
 end;
 
