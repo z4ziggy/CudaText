@@ -2,4 +2,4 @@ version: "1"
 rules:
   - base: master
     upstream: Alexey-T:master
-    mergeMethod: hardreset
+    mergeMethod: none
