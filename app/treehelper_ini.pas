@@ -33,21 +33,29 @@ var
   DataItem: TATTreeHelperRecord;
   St: TATStrings;
   S: UnicodeString;
-  iLine, iSymbol: integer;
+  iLine, iSymbol, NLen: integer;
 begin
   Data.Clear;
   St:= Ed.Strings;
   for iLine:= 0 to St.Count-1 do
   begin
     S:= St.Lines[iLine];
-    if S='' then Continue;
-    if S[1]=';' then Continue;
-    if S[1]='#' then Continue;
-    if (Length(S)>=3) and (S[1]='[') and (S[Length(S)]=']') then
+    NLen:= Length(S);
+    if NLen=0 then Continue;
+
+    //skip commented lines
+    iSymbol:= 1;
+    while (iSymbol<=NLen) and (S[iSymbol]=' ') do
+      Inc(iSymbol);
+    if iSymbol>NLen then Continue;
+    if S[iSymbol]=';' then Continue;
+    if S[iSymbol]='#' then Continue;
+
+    if (NLen>=3) and (S[1]='[') and (S[NLen]=']') then
     begin
       DataItem.X1:= 0;
       DataItem.Y1:= iLine;
-      DataItem.X2:= Length(S);
+      DataItem.X2:= NLen;
       DataItem.Y2:= iLine;
       DataItem.Level:= 1;
       DataItem.Title:= S;
@@ -61,7 +69,7 @@ begin
       begin
         DataItem.X1:= 0;
         DataItem.Y1:= iLine;
-        DataItem.X2:= Length(S);
+        DataItem.X2:= NLen;
         DataItem.Y2:= iLine;
         DataItem.Level:= 2;
         DataItem.Title:= Copy(S, 1, iSymbol-1);

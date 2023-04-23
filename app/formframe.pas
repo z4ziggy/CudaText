@@ -4419,6 +4419,14 @@ begin
 end;
 
 procedure TEditorFrame.NotifyAboutChange(Ed: TATSynEdit);
+  //
+  function ModalConfirm(const AFileName: string): boolean;
+  begin
+    Result:= MsgBox(
+      msgConfirmFileChangedOutside+#10+AFileName+#10#10+msgConfirmReloadIt,
+      MB_OKCANCEL or MB_ICONWARNING)=ID_OK;
+  end;
+  //
 var
   EdIndex: integer;
   SFileName: string;
@@ -4458,12 +4466,29 @@ begin
   if not TabExtDeleted[EdIndex] and TabExtModified[EdIndex] then
   begin
     case UiOps.NotificationConfirmReload of
+      0:
+        bShowPanel:= true;
       1:
         bShowPanel:= Ed.Modified or not Ed.Strings.UndoEmpty;
       2:
         bShowPanel:= Ed.Modified; //like Notepad++
+      3:
+        begin
+          if ModalConfirm(SFileName) then
+            DoFileReload(Ed);
+          exit;
+        end;
+      4:
+        begin
+          if (not Ed.Modified) or ModalConfirm(SFileName) then
+            DoFileReload(Ed);
+          exit;
+        end;
       else
-        bShowPanel:= true;
+        begin
+          bShowPanel:= true;
+          MsgLogConsole(Format('ERROR: Wrong value of option "ui_notif_confirm": %d', [UiOps.NotificationConfirmReload]));
+        end;
     end;
 
     if not bShowPanel then
