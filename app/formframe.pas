@@ -21,6 +21,7 @@ uses
   ATSynEdit_Adapter_LiteLexer,
   ATSynEdit_Finder,
   ATSynEdit_Gaps,
+  ATSynEdit_Cmp_Form,
   ATStringProc,
   ATButtons,
   ATBinHex,
@@ -208,6 +209,7 @@ type
     FTabExtDeleted: array[0..1] of boolean;
     FCachedTreeview: array[0..1] of TTreeView;
     FLexerBackup: array[0..1] of TATAdapterHilite;
+    FReloadConfirms: array[0..1] of boolean;
     FLexerChooseFunc: TecLexerChooseFunc;
     FLexerNameBackup1: string;
     FLexerNameBackup2: string;
@@ -621,6 +623,14 @@ begin
 end;
 
 
+function MsgConfirmReload(const AFileName: string): boolean;
+begin
+  Result:= MsgBox(
+    msgConfirmFileChangedOutside+#10+AFileName+#10#10+msgConfirmReloadIt,
+    MB_OKCANCEL or MB_ICONWARNING)=ID_OK;
+end;
+
+
 procedure GetFrameLocation(Frame: TEditorFrame;
   out AGroups: TATGroups; out APages: TATPages;
   out ALocalGroupIndex, AGlobalGroupIndex, ATabIndex: integer);
@@ -744,7 +754,9 @@ begin
   Ed:= Sender as TATSynEdit;
 
   StateString:= ConvertShiftStateToString(KeyboardStateToShiftState);
+
   CancelAutocompleteAutoshow;
+  CloseFormAutoCompletion;
 
   if Ed.Markers.DeleteWithTag(UiOps.FindOccur_TagValue) then
     Ed.Update;
@@ -822,6 +834,8 @@ end;
 
 procedure TEditorFrame.EditorOnScroll(Sender: TObject);
 begin
+  CloseFormAutoCompletion;
+
   if Assigned(FOnEditorScroll) then
     FOnEditorScroll(Sender);
 
@@ -852,8 +866,31 @@ end;
 
 procedure TEditorFrame.DoShow;
 var
+  Ed: TATSynEdit;
   an: TecSyntAnalyzer;
+  iEd: integer;
 begin
+  for iEd:= 0 to 1 do
+  begin
+    if FReloadConfirms[iEd] then
+    begin
+      FReloadConfirms[iEd]:= false;
+      Ed:= EditorIndexToObj(iEd);
+      case UiOps.NotificationConfirmReload of
+        3:
+          begin
+            if MsgConfirmReload(Ed.FileName) then
+              DoFileReload(Ed);
+          end;
+        4:
+          begin
+            if (not Ed.Modified) or MsgConfirmReload(Ed.FileName) then
+              DoFileReload(Ed);
+          end;
+      end;
+    end;
+  end;
+
   //analyze file, when frame is shown for the 1st time
   if AppAllowFrameParsing and not FWasVisible then
   begin
@@ -2275,6 +2312,8 @@ end;
 
 destructor TEditorFrame.Destroy;
 begin
+  CloseFormAutoCompletion;
+
   if Assigned(FBin) then
   begin
     FBin.OpenStream(nil, False); //ARedraw=False to not paint on Win desktop with DC=0
@@ -3165,6 +3204,8 @@ begin
   if SFileName='' then exit(false);
   EdIndex:= EditorObjToIndex(Ed);
   if EdIndex<0 then exit;
+
+  CloseFormAutoCompletion;
 
   if not FileExists(SFileName) then
   begin
@@ -4419,14 +4460,6 @@ begin
 end;
 
 procedure TEditorFrame.NotifyAboutChange(Ed: TATSynEdit);
-  //
-  function ModalConfirm(const AFileName: string): boolean;
-  begin
-    Result:= MsgBox(
-      msgConfirmFileChangedOutside+#10+AFileName+#10#10+msgConfirmReloadIt,
-      MB_OKCANCEL or MB_ICONWARNING)=ID_OK;
-  end;
-  //
 var
   EdIndex: integer;
   SFileName: string;
@@ -4474,13 +4507,19 @@ begin
         bShowPanel:= Ed.Modified; //like Notepad++
       3:
         begin
-          if ModalConfirm(SFileName) then
+          if not Visible then
+            FReloadConfirms[EdIndex]:= true
+          else
+          if MsgConfirmReload(SFileName) then
             DoFileReload(Ed);
           exit;
         end;
       4:
         begin
-          if (not Ed.Modified) or ModalConfirm(SFileName) then
+          if not Visible then
+            FReloadConfirms[EdIndex]:= true
+          else
+          if (not Ed.Modified) or MsgConfirmReload(SFileName) then
             DoFileReload(Ed);
           exit;
         end;
@@ -4682,6 +4721,8 @@ end;
 
 procedure TEditorFrame.DoFileClose;
 begin
+  CloseFormAutoCompletion;
+
   //clear adapters
   Lexer[Ed1]:= nil;
   if not EditorsLinked then

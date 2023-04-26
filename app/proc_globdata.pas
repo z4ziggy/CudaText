@@ -279,6 +279,7 @@ type
     AutocompleteInComments: boolean;
     AutocompleteInCommentsHTML: boolean;
     AutocompleteInStrings: boolean;
+    AutocompleteClosingDelay: integer;
 
     HtmlBackgroundColorPair: array[boolean] of TColor;
 
@@ -368,6 +369,7 @@ type
     AllowProgramUpdates: boolean;
     EscapeClose: boolean;
     EscapeCloseConsole: boolean;
+    EscapeCloseFinder: boolean;
     ConsoleWordWrap: boolean;
     InputHeight: integer;
     InitialDir: string;
@@ -1932,6 +1934,7 @@ begin
     AutocompleteInComments:= false;
     AutocompleteInCommentsHTML:= true;
     AutocompleteInStrings:= true;
+    AutocompleteClosingDelay:= 300;
 
     HtmlBackgroundColorPair[false]:= $F0F0F0;
     HtmlBackgroundColorPair[true]:= $101010;
@@ -2030,6 +2033,7 @@ begin
     AllowProgramUpdates:= true;
     EscapeClose:= false;
     EscapeCloseConsole:= true;
+    EscapeCloseFinder:= true;
     ConsoleWordWrap:= true;
     InputHeight:= 26;
     InitialDir:= '';

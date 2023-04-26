@@ -61,6 +61,8 @@ begin
 
     cmd_FileClose:
       begin
+        CloseFormAutoCompletion;
+
         if Assigned(EdPages) then
         begin
           NIndex:= EdPages.Tabs.FindTabByObject(Frame);
@@ -80,6 +82,8 @@ begin
 
     cmd_FileCloseAll:
       begin
+        CloseFormAutoCompletion;
+
         DoCloseAllTabs(false);
 
         Frame:= CurrentFrame;

@@ -454,6 +454,7 @@ type
     procedure AppPropsDropFiles(Sender: TObject;
       const FileNames: array of string);
     procedure AppPropsEndSession(Sender: TObject);
+    procedure AppPropsModalBegin(Sender: TObject);
     procedure AppPropsQueryEndSession(var Cancel: Boolean);
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -467,6 +468,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure FormWindowStateChange(Sender: TObject);
     procedure FrameAddRecent(Sender: TObject);
     procedure FrameOnMsgStatus(Sender: TObject; const AStr: string);
@@ -798,10 +800,12 @@ type
     procedure FormFloatGroups1_OnEmpty(Sender: TObject);
     procedure FormFloatGroups2_OnEmpty(Sender: TObject);
     procedure FormFloatGroups3_OnEmpty(Sender: TObject);
-    procedure FormFloatGroups_OnDropFiles(Sender: TObject; const FileNames: array of String);
     procedure FormFloatGroups1_OnClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormFloatGroups2_OnClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormFloatGroups3_OnClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormFloatGroups_OnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormFloatGroups_OnUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+    procedure FormFloatGroups_OnDropFiles(Sender: TObject; const FileNames: array of String);
     procedure CharmapOnInsert(const AStr: string);
     procedure DoLocalize;
     procedure DoLocalizePopupTab;
@@ -827,6 +831,7 @@ type
     procedure DoCodetree_OnContextPopup(Sender: TObject; MousePos: TPoint; var Handled: Boolean);
     procedure DoCodetree_GetSyntaxRange(ANode: TTreeNode; out APosBegin, APosEnd: TPoint);
     procedure DoCodetree_SetSyntaxRange(ANode: TTreeNode; const APosBegin, APosEnd: TPoint);
+    procedure DoCodetree_OnClick(Sender: TObject);
     procedure DoCodetree_OnDblClick(Sender: TObject);
     procedure DoCodetree_OnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure DoCodetree_OnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -2434,6 +2439,11 @@ begin
     AppCodetreeState.Lexer:= '';
 end;
 
+procedure TfmMain.DoCodetree_OnClick(Sender: TObject);
+begin
+  CloseFormAutoCompletion;
+end;
+
 procedure TfmMain.DoCodetree_OnDblClick(Sender: TObject);
 var
   Ed: TATSynEdit;
@@ -2586,6 +2596,7 @@ begin
   CodeTree.Parent:= PanelCodeTreeAll;
   CodeTree.Align:= alClient;
   CodeTree.Themed:= true;
+  CodeTree.Tree.OnClick:= @DoCodetree_OnClick;
   CodeTree.Tree.OnDblClick:= @DoCodetree_OnDblClick;
   CodeTree.Tree.OnMouseMove:= @DoCodetree_OnMouseMove;
   CodeTree.Tree.OnKeyDown:= @DoCodetree_OnKeyDown;
@@ -2954,6 +2965,7 @@ end;
 
 procedure TfmMain.FormChangeBounds(Sender: TObject);
 begin
+  CloseFormAutoCompletion;
   DoTooltipHide;
 end;
 
@@ -3009,8 +3021,6 @@ procedure TfmMain.AppPropsDeactivate(Sender: TObject);
 var
   F: TEditorFrame;
 begin
-  //Caption:= 'deact '+TimeToStr(Now);
-
   if EditorOps.OpDimUnfocused<>0 then
   begin
     F:= CurrentFrame;
@@ -3018,8 +3028,10 @@ begin
       F.Editor.Update;
   end;
 
-  if Assigned(FormAutoCompletion) and FormAutoCompletion.Visible then
-    FormAutoCompletion.Close;
+  {
+  //it was needed when autocomplete was non-docked window, to hide autocomplete from Alt+Tab
+  CloseFormAutoCompletion;
+  }
 
   DoPyEvent_AppActivate(cEventOnAppDeactivate);
 end;
@@ -3041,6 +3053,11 @@ end;
 procedure TfmMain.AppPropsEndSession(Sender: TObject);
 begin
   //
+end;
+
+procedure TfmMain.AppPropsModalBegin(Sender: TObject);
+begin
+  CloseFormAutoCompletion;
 end;
 
 procedure TfmMain.AppPropsQueryEndSession(var Cancel: Boolean);
@@ -3140,6 +3157,8 @@ end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
+  CloseFormAutoCompletion;
+
   AppStopListTimers;
 
   if Assigned(FFinder) then
@@ -3236,6 +3255,33 @@ begin
   end;
 end;
 
+procedure TfmMain.FormFloatGroups_OnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Assigned(FormAutoCompletion) and FormAutoCompletion.Visible then
+  begin
+    FormAutoCompletion.FormKeyDown(Sender, Key, Shift);
+    exit;
+  end;
+end;
+
+procedure TfmMain.FormFloatGroups_OnUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+begin
+  if Assigned(FormAutoCompletion) and FormAutoCompletion.Visible then
+  begin
+    FormAutoCompletion.FormUTF8KeyPress(Sender, UTF8Key);
+    exit;
+  end;
+end;
+
+procedure TfmMain.FormUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+begin
+  if Assigned(FormAutoCompletion) and FormAutoCompletion.Visible then
+  begin
+    FormAutoCompletion.FormUTF8KeyPress(Sender, UTF8Key);
+    exit;
+  end;
+end;
+
 procedure TfmMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   bEditorActive,
@@ -3246,6 +3292,12 @@ var
   KeyArray: TATKeyArray;
   N: integer;
 begin
+  if Assigned(FormAutoCompletion) and FormAutoCompletion.Visible then
+  begin
+    FormAutoCompletion.FormKeyDown(Sender, Key, Shift);
+    exit;
+  end;
+
   if (Key=VK_ESCAPE) and (Shift=[]) then
   begin
     PyEscapeFlag:= true;
@@ -3289,8 +3341,13 @@ begin
     if bFindDockedAndVisible then
     begin
       Ed:= Ctl as TATSynEdit;
-      EditorClearHiAllMarkers(Ed);
-      fmFind.Hide;
+      if UiOps.EscapeCloseFinder then
+      begin
+        EditorClearHiAllMarkers(Ed);
+        fmFind.Hide;
+      end
+      else
+        Ed.SetFocus;
       Key:= 0;
     end
     else
@@ -4150,6 +4207,8 @@ begin
 
   ATFlatTheme.FontName:= UiOps.VarFontName;
   ATFlatTheme.FontSize:= UiOps.VarFontSize;
+  ATFlatTheme.MonoFontName:= EditorOps.OpFontName;
+  ATFlatTheme.MonoFontSize:= EditorOps.OpFontSize;
   ATFlatTheme.ScalePercents:= ATEditorScalePercents;
   ATFlatTheme.ScaleFontPercents:= ATEditorScaleFontPercents;
 
@@ -5949,6 +6008,8 @@ begin
   Frame:= TGroupsHelper.GetEditorFrame(Ed);
   if Frame=nil then exit;
 
+  CloseFormAutoCompletion;
+
   if not Frame.EditorsLinked then
   begin
     MsgStatus(msgCannotHandleSplittedTab);
@@ -6740,6 +6801,7 @@ begin
   CompletionOps.CommitIfSingleItem:= Ed.OptAutocompleteCommitIfSingleItem; //before DoPyEvent
   CompletionOps.CommandForShitchTab:= cmd_SwitchTab_HotkeyNext;
   CompletionOps.ShortcutForAutocomplete:= Ed.Keymap.GetShortcutFromCommand(cmd_AutoComplete);
+  CompletionOps.ClosingTimerInverval:= UiOps.AutocompleteClosingDelay;
 
   //auto-completion for file:///, before plugins
   if UiOps.AutocompleteFileURI and
@@ -7495,6 +7557,8 @@ var
 begin
   AHandled:= true; //avoid selection of word
 
+  CloseFormAutoCompletion;
+
   Form:= FindBottomForm_ByEditor(Sender as TATSynEdit);
   if Form=nil then exit;
 
@@ -8189,7 +8253,10 @@ begin
     F.BorderIcons:= [biSystemMenu, biMaximize, biMinimize];
     F.OnClose:= AOnClose;
     F.OnActivate:= @FormActivate;
+    F.OnKeyDown:= @FormFloatGroups_OnKeyDown;
+    F.OnUTF8KeyPress:= @FormFloatGroups_OnUTF8KeyPress;
     F.Caption:= Format('[f%d]', [AIndexOfGroup]) + (' - ' + msgTitle);
+    F.KeyPreview:= true;
 
     F.AllowDropFiles:= true;
     F.OnDropFiles:= @FormFloatGroups_OnDropFiles;

@@ -108,6 +108,7 @@ var
   Pages: TATPages;
   Data: TATTabData;
 begin
+  CloseFormAutoCompletion;
   DoTooltipHide;
 
   if IsTooManyTabsOpened then exit;
@@ -129,6 +130,7 @@ begin
   D:= Tabs.GetTabData(Tabs.TabIndex);
   if D=nil then exit;
 
+  CloseFormAutoCompletion;
   DoTooltipHide;
 
   F:= D.TabObject as TEditorFrame;
@@ -271,6 +273,7 @@ begin
   bNeedTreeUpd:= Frame.Visible;
   bSavedOk:= true;
 
+  CloseFormAutoCompletion;
   DoTooltipHide;
 
   if Frame.Editor.IsLocked then

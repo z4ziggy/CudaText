@@ -846,7 +846,7 @@ begin
   Frame:= CurrentFrame;
   if Assigned(Frame) then
   begin
-    DoOnTabFocusFinalization(Frame, nCountFiles>0);
+    DoOnTabFocusFinalization(Frame, nCountFiles+nCountFilesModified>0);
 
     //python 'on_caret' is disabled during session loading, so fire it here
     Ed:= Frame.Ed1;
@@ -855,7 +855,7 @@ begin
   end;
 
   SetLength(FPrevFramesEditState, FrameCount);
-  for iFrame:= 0 to FrameCount-1 do
+  for iFrame:= 0 to Length(FPrevFramesEditState)-1 do
   begin
     Frame:= Frames[iFrame];
     FPrevFramesEditState[iFrame].Assign(Frame);
@@ -1553,6 +1553,7 @@ begin
   UiOps.AutocompleteCss:= cfg.GetValue('autocomplete_css', UiOps.AutocompleteCss);
   UiOps.AutocompleteCss_Lexers:= cfg.GetValue('autocomplete_css_lexers', UiOps.AutocompleteCss_Lexers);
   UiOps.AutocompleteFileURI:= cfg.GetValue('autocomplete_file_uri', UiOps.AutocompleteFileURI);
+  UiOps.AutocompleteClosingDelay:= cfg.GetValue('autocomplete_closing_delay', UiOps.AutocompleteClosingDelay);
 
   UiOps.FindSuggestSel:= cfg.GetValue('find_suggest_sel', UiOps.FindSuggestSel);
   UiOps.FindSuggestWord:= cfg.GetValue('find_suggest_cur_word', UiOps.FindSuggestWord);
@@ -1637,6 +1638,7 @@ begin
 
   UiOps.EscapeClose:= cfg.GetValue('ui_esc_close', UiOps.EscapeClose);
   UiOps.EscapeCloseConsole:= cfg.GetValue('ui_esc_close_console', UiOps.EscapeCloseConsole);
+  UiOps.EscapeCloseFinder:= cfg.GetValue('ui_esc_close_finder', UiOps.EscapeCloseFinder);
   UiOps.ConsoleWordWrap:= cfg.GetValue('ui_console_wrap', UiOps.ConsoleWordWrap);
   UiOps.InitialDir:= cfg.GetValue('ui_initial_dir', UiOps.InitialDir);
   UiOps.OpenDir:= cfg.GetValue('ui_open_dir', UiOps.OpenDir);

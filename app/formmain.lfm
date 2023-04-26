@@ -22,6 +22,7 @@ object fmMain: TfmMain
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  OnUTF8KeyPress = FormUTF8KeyPress
   OnWindowStateChange = FormWindowStateChange
   LCLVersion = '2.3.0.0'
   Visible = True
@@ -676,6 +677,7 @@ object fmMain: TfmMain
     OnDeactivate = AppPropsDeactivate
     OnEndSession = AppPropsEndSession
     OnQueryEndSession = AppPropsQueryEndSession
+    OnModalBegin = AppPropsModalBegin
     OnDropFiles = AppPropsDropFiles
     Left = 520
     Top = 424
