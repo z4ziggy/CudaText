@@ -1730,23 +1730,47 @@ end;
 
 
 procedure TfmMain.DoOps_LoadOptionsLexerSpecific(F: TEditorFrame; Ed: TATSynEdit);
+  //
+  procedure ApplyOps(const Ops: TEditorOps);
+  var
+    PrevTabSize: integer;
+    PrevTabSizeChanged: boolean;
+    PrevTabSpaces: boolean;
+    PrevTabSpacesChanged: boolean;
+    TempOps: TATEditorTempOptions;
+  begin
+    PrevTabSize:= Ed.OptTabSize;
+    PrevTabSizeChanged:= F.TabSizeChanged;
+    PrevTabSpaces:= Ed.OptTabSpaces;
+    PrevTabSpacesChanged:= F.TabSpacesChanged;
+
+    EditorSaveTempOptions(Ed, TempOps);
+    TempOps.FontSize:= Ops.OpFontSize; //support overriding "font_size" in lexer-specific config
+    DoApplyFrameOps(F, Ops, true);
+    EditorRestoreTempOptions(Ed, TempOps, Ed.InitialOptions);
+
+    if PrevTabSizeChanged then
+      Ed.OptTabSize:= PrevTabSize;
+    if PrevTabSpacesChanged then
+      Ed.OptTabSpaces:= PrevTabSpaces;
+  end;
+  //
 var
-  Ops: TEditorOps;
   FilenameDefault, FilenameUser, CurLexer: string;
   bExistsDefault, bExistsUser: boolean;
-  TempOps: TATEditorTempOptions;
   SNewLoadedConfig: string;
-  PrevTabSize: integer;
-  PrevTabSizeChanged: boolean;
-  PrevTabSpaces: boolean;
-  PrevTabSpacesChanged: boolean;
 begin
   if F=nil then exit;
 
   CurLexer:= F.LexerName[Ed];
   SNewLoadedConfig:= 'lexer:'+CurLexer;
-  if FLastLoadedConfig=SNewLoadedConfig then exit; //fix issue #4225
+  if FLastLoadedConfig=SNewLoadedConfig then //fix issue #4225
+  begin
+    ApplyOps(FLastLoadedEditorOps);
+    exit;
+  end;
   FLastLoadedConfig:= SNewLoadedConfig;
+  FLastLoadedEditorOps:= EditorOps;
 
   FilenameDefault:= AppFile_LexerSpecificConfig(CurLexer, true);
   FilenameUser:= AppFile_LexerSpecificConfig(CurLexer, false);
@@ -1756,35 +1780,21 @@ begin
 
   if bExistsDefault or bExistsUser then
   begin
-    Ops:= EditorOps;
-    EditorSaveTempOptions(Ed, TempOps);
-
-    PrevTabSize:= Ed.OptTabSize;
-    PrevTabSizeChanged:= F.TabSizeChanged;
-    PrevTabSpaces:= Ed.OptTabSpaces;
-    PrevTabSpacesChanged:= F.TabSpacesChanged;
-
     if bExistsDefault then
     begin
-      DoOps_LoadOptions(FilenameDefault, Ops, false);
+      DoOps_LoadOptions(FilenameDefault, FLastLoadedEditorOps, false);
     end;
 
     if bExistsUser then
     begin
-      DoOps_LoadOptions(FilenameUser, Ops, false);
+      DoOps_LoadOptions(FilenameUser, FLastLoadedEditorOps, false);
 
       //store 'centering...' options in special way
-      AppOption_SaveToStringlist(EditorOps_CenteringWidth, CurLexer, Ops.OpCenteringWidth);
-      AppOption_SaveToStringlist(EditorOps_CenteringDistFree, CurLexer, Ops.OpCenteringForDistractionFree);
+      AppOption_SaveToStringlist(EditorOps_CenteringWidth, CurLexer, FLastLoadedEditorOps.OpCenteringWidth);
+      AppOption_SaveToStringlist(EditorOps_CenteringDistFree, CurLexer, FLastLoadedEditorOps.OpCenteringForDistractionFree);
     end;
 
-    DoApplyFrameOps(F, Ops, true);
-    EditorRestoreTempOptions(Ed, TempOps, Ed.InitialOptions);
-
-    if PrevTabSizeChanged then
-      Ed.OptTabSize:= PrevTabSize;
-    if PrevTabSpacesChanged then
-      Ed.OptTabSpaces:= PrevTabSpaces;
+    ApplyOps(FLastLoadedEditorOps);
   end;
 end;
 
