@@ -395,6 +395,7 @@ begin
       if bModified and UiOps.HistoryItems[ahhText] then
         if (not bUntitled and ASaveModifiedFiles) or
           (bUntitled and ASaveUntitledTabs) then
+          if not Frame.Ed1.Strings.IsSizeBig(UiOps.MaxSizeForSession) then
         begin
           cfg.SetValue(path+'/text', Frame.Ed1.Text);
           if (not bUntitled) and FileExists(sTabFilename) then
@@ -426,6 +427,7 @@ begin
         cfg.SetValue(path+'/file', AppCollapseHomeDirInFilename(sTabFilename2));
 
         if bModified and UiOps.HistoryItems[ahhText] then
+          if not Frame.Ed2.Strings.IsSizeBig(UiOps.MaxSizeForSession) then
         begin
           cfg.SetValue(path+'/text', Frame.Ed2.Text);
           if FileExists(sTabFilename2) then
@@ -1544,6 +1546,7 @@ begin
   UiOps.PictureTypes:= cfg.GetValue('picture_types', UiOps.PictureTypes);
 
   UiOps.MaxFileSizeToOpen:= cfg.GetValue('ui_max_size_open', UiOps.MaxFileSizeToOpen);
+  UiOps.MaxFileSizeToOpen:= Min(UiOps.MaxFileSizeToOpen, 2*1024-1); //because TStream.ReadBuffer is called, it can handle only 32-bit LongInt
   UiOps.MaxFileSizeForLexer:= cfg.GetValue('ui_max_size_lexer', UiOps.MaxFileSizeForLexer);
 
   UiOps.AutocompleteAcpFiles:= cfg.GetValue('autocomplete_acp', UiOps.AutocompleteAcpFiles);

@@ -230,6 +230,8 @@ type
     PyOutputCopyToStdout: boolean;
 
     MaxLineLenForEditingKeepingLexer: integer;
+    MaxSizeForSession: integer;
+    MaxLinesForMicromapPaint: integer;
     InfoAboutOptionsEditor: boolean;
     AllowRunPkExec: boolean;
     AllowCheckConfigsForNullBytes: boolean;
@@ -2063,6 +2065,9 @@ begin
     PyOutputCopyToStdout:= false;
 
     MaxLineLenForEditingKeepingLexer:= 2000;
+    MaxSizeForSession:= 50*1024*1024;
+    MaxLinesForMicromapPaint:= 300*1024;
+
     InfoAboutOptionsEditor:= true;
     AllowRunPkExec:= true;
     AllowCheckConfigsForNullBytes:= true;

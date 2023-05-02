@@ -22,6 +22,7 @@ uses
   ATSynEdit_Finder,
   ATSynEdit_Gaps,
   ATSynEdit_Cmp_Form,
+  ATStrings,
   ATStringProc,
   ATButtons,
   ATBinHex,
@@ -223,7 +224,9 @@ type
     FProgressForm: TForm;
     FProgressGauge: TATGauge;
     FProgressOldProgress: integer;
-    FProgressOldHandler: TNotifyEvent;
+    FProgressOldHandler: TATStringsProgressEvent;
+    FProgressButtonCancel: TATButton;
+    FProgressCancelled: boolean;
 
     procedure ApplyThemeToInfoPanel(APanel: TPanel);
     procedure BinaryOnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -281,7 +284,8 @@ type
     function GetCachedTreeview(Ed: TATSynEdit): TTreeView;
     function GetCommentString(Ed: TATSynEdit): string;
     function GetTextChangeSlow(EdIndex: integer): boolean;
-    procedure HandleStringsProgress(Sender: TObject);
+    procedure HandleProgressButtonCancel(Sender: TObject);
+    procedure HandleStringsProgress(Sender: TObject; var ACancel: boolean);
     procedure SetTextChangeSlow(EdIndex: integer; AValue: boolean);
     function GetEnabledCodeTree(Ed: TATSynEdit): boolean;
     function GetEnabledFolding: boolean;
@@ -557,7 +561,6 @@ uses
   ATSynEdit_Bookmarks,
   ATSynEdit_CanvasProc,
   ATSynEdit_WrapInfo,
-  ATStrings,
   ATStringProc_Separator,
   ATStringProc_HtmlColor,
   ATSynEdit_Cmp_RenderHTML,
@@ -1065,7 +1068,8 @@ begin
 
   //support Primary Selection on Linux
   {$ifdef linux}
-  EditorCopySelToPrimarySelection(Ed, cMaxSelectedLinesForAutoCopy);
+  if ATEditorOptions.AutoCopyToPrimarySel then
+    EditorCopySelToPrimarySelection(Ed, cMaxSelectedLinesForAutoCopy);
   {$endif}
 
   //on_caret, now
@@ -2831,7 +2835,12 @@ begin
   DoOnUpdateStatusbar(sbrFileOpen);
 end;
 
-procedure TEditorFrame.HandleStringsProgress(Sender: TObject);
+procedure TEditorFrame.HandleProgressButtonCancel(Sender: TObject);
+begin
+  FProgressCancelled:= true;
+end;
+
+procedure TEditorFrame.HandleStringsProgress(Sender: TObject; var ACancel: boolean);
 const
   //avoid too many form updates
   cStepPercents = 8;
@@ -2844,6 +2853,7 @@ begin
   FProgressGauge.Progress:= St.ProgressValue;
   FProgressOldProgress:= St.ProgressValue;
   Application.ProcessMessages;
+  ACancel:= FProgressCancelled;
 end;
 
 procedure TEditorFrame.DoFileOpen_Ex(Ed: TATSynEdit; const AFileName: string;
@@ -2861,13 +2871,20 @@ begin
     NFileSize:= FileSize(AFileName);
     if NFileSize>UiOps.MaxFileSizeWithoutProgressForm then
     begin
-      AppInitProgressForm(FProgressForm, FProgressGauge, Format('%s (%d Mb)', [
+      AppInitProgressForm(
+        FProgressForm,
+        FProgressGauge,
+        FProgressButtonCancel,
+        Format('%s (%d Mb)', [
           ExtractFileName(AFileName),
           //AppCollapseHomeDirInFilename(ExtractFileDir(AFileName)),
           NFileSize div (1024*1024)
           ]));
       FProgressOldProgress:= 0;
       FProgressOldHandler:= St.OnProgress;
+      FProgressButtonCancel.Caption:= msgButtonCancel;
+      FProgressButtonCancel.OnClick:= @HandleProgressButtonCancel;
+      FProgressCancelled:= false;
       St.OnProgress:= @HandleStringsProgress;
       FProgressForm.Show;
       Application.ProcessMessages;
@@ -2884,11 +2901,11 @@ begin
       end;
       UpdateLocked(Ed, true);
       Ed.LoadFromFile(AFileName, LoadOptions);
-      UpdateLocked(Ed, false);
-      St.EncodingDetect:= true;
       SetFileName(Ed, AFileName);
       UpdateCaptionFromFilename;
     finally
+      UpdateLocked(Ed, false);
+      St.EncodingDetect:= true;
       if Assigned(FProgressForm) then
       begin
         St.OnProgress:= FProgressOldHandler;
@@ -2898,14 +2915,17 @@ begin
       end;
     end;
   except
-    if AAllowErrorMsgBox then
-      MsgBox(msgCannotOpenFile+#10+AFileName, MB_OK or MB_ICONERROR);
+    on E: Exception do
+    begin
+      if AAllowErrorMsgBox then
+        MsgBox(msgCannotOpenFile+#10+AFileName+#10+E.Message, MB_OK or MB_ICONERROR);
 
-    SetFileName(Ed, '');
-    UpdateCaptionFromFilename;
+      SetFileName(Ed, '');
+      UpdateCaptionFromFilename;
 
-    EditorClear(Ed);
-    exit
+      EditorClear(Ed);
+      exit
+    end;
   end;
 
   //turn off opts for huge files
@@ -3599,6 +3619,8 @@ end;
 
 procedure TEditorFrame.PaintMicromap(Ed: TATSynEdit; ACanvas: TCanvas; const ARect: TRect);
 begin
+  if Ed.Strings.Count>UiOps.MaxLinesForMicromapPaint then exit;
+
   if FMicromapBmp=nil then
     FMicromapBmp:= TBGRABitmap.Create;
   EditorPaintMicromap(Ed, ACanvas, ARect, FMicromapBmp);
