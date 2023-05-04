@@ -1145,6 +1145,8 @@ begin
   ATEditorOptions.MaxTabPositionToExpand:= cfg.GetValue('tab_max_pos_expanded', ATEditorOptions.MaxTabPositionToExpand);
   ATEditorOptions.MaxLinesForStatusbarOffsetsCalc:= cfg.GetValue('max_lines_to_calc_offsets', ATEditorOptions.MaxLinesForStatusbarOffsetsCalc);
   ATEditorOptions.MaxLineLenForAccurateCharWidths:= Min(1024, cfg.GetValue('max_line_len_for_accurate_width', ATEditorOptions.MaxLineLenForAccurateCharWidths));
+  ATEditorOptions.MaxLineLenForUndo:= cfg.GetValue('max_line_len_for_undo', ATEditorOptions.MaxLineLenForUndo);
+  ATLiteLexerMaxLineLength:= cfg.GetValue('max_line_len_parsed', ATLiteLexerMaxLineLength);
   ATEditorMaxClipboardRecents:= cfg.GetValue('ui_max_history_clipboard', ATEditorMaxClipboardRecents);
   ATEditorOptions.MinimapColoringTime:= cfg.GetValue('minimap_coloring_time', ATEditorOptions.MinimapColoringTime);
   ATEditorOptions.SpeedScrollAutoVert:= cfg.GetValue('mouse_scroll_speed_vert', ATEditorOptions.SpeedScrollAutoVert);
@@ -1254,9 +1256,7 @@ begin
   Op.OpTabSpaces:= cfg.GetValue('tab_spaces', Op.OpTabSpaces);
   Op.OpTabSmart:= cfg.GetValue('tab_smart', Op.OpTabSmart);
 
-  Op.OpMaxLineLenToTokenize:= cfg.GetValue('max_line_len_parsed', Op.OpMaxLineLenToTokenize);
-  Op.OpMaxLineLenForBracketFinder:= Op.OpMaxLineLenToTokenize; //do we need separate option?
-  ATLiteLexerMaxLineLength:= Op.OpMaxLineLenToTokenize;
+  Op.OpMaxLineLenForBracketFinder:= cfg.GetValue('max_line_len_brackets', Op.OpMaxLineLenForBracketFinder);
 
   Op.OpOverwriteSel:= cfg.GetValue('ovr_sel', Op.OpOverwriteSel);
   Op.OpOverwriteOnPaste:= cfg.GetValue('ovr_on_paste', Op.OpOverwriteOnPaste);
@@ -1371,8 +1371,7 @@ begin
   Op.OpCenteringForDistractionFree:= cfg.GetValue('centering_for_distraction_free', Op.OpCenteringForDistractionFree);
   Op.OpScrollStyleHorz:= cfg.GetValue('scroll_style_horz', Op.OpScrollStyleHorz);
 
-  Op.OpLexerDynamicHiliteEnabled:= cfg.GetValue('lexer_dynamic_hilite', Op.OpLexerDynamicHiliteEnabled);
-  Op.OpLexerDynamicHiliteMaxLines:= cfg.GetValue('lexer_dynamic_hilite_max_lines', Op.OpLexerDynamicHiliteMaxLines);
+  Op.OpLexerDynamicHiliteMaxLines:= cfg.GetValue('dynamic_highlight', Op.OpLexerDynamicHiliteMaxLines);
   Op.OpLexerLineSeparators:= false; //cfg.GetValue('lexer_line_separators', Op.OpLexerLineSeparators);
 
   Op.OpZebra:= cfg.GetValue('zebra', Op.OpZebra);
