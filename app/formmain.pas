@@ -3162,6 +3162,7 @@ begin
 
   AppStopListTimers;
 
+  FreeAndNil(FPrevJsonObj);
   if Assigned(FFinder) then
     FreeAndNil(FFinder);
 end;
