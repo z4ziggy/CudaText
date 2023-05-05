@@ -1690,7 +1690,7 @@ begin
     OpAutoCloseBrackets:= '([{';
     OpAutocompleteAutoshowCharCount:= 0;
     OpAutocompleteTriggerChars:= '';
-    OpAutocompleteCommitChars:= ' ,;';
+    OpAutocompleteCommitChars:= ',;';
     OpAutocompleteCloseChars:= '<>()[]{}=';
     OpAutocompleteAddOpeningBracket:= true;
     OpAutocompleteUpDownAtEdge:= 1; //cudWrap
@@ -4051,7 +4051,7 @@ finalization
   FreeAndNil(AppTreeHelpers);
   FreeAndNil(AppEventList);
   FreeAndNil(AppCommandList);
-  AppConsoleQueue.Push(''); // FIX for #5037: Adds dummy data to avoid exception on free
+  AppConsoleQueue.Push(''); // fix for #5037: Adds dummy data to avoid exception on free
   FreeAndNil(AppConsoleQueue);
   FreeAndNil(AppCommandsDelayed);
 
