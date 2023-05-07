@@ -548,6 +548,7 @@ type
     PopupTabSize: TPopupMenu;
     PopupViewerMode: TPopupMenu;
     PopupPicScale: TPopupMenu;
+    PopupStatusbarMsg: TPopupMenu;
     mnuTabCloseAllAll: TMenuItem;
     mnuTabCloseAllSame: TMenuItem;
     mnuTabCloseLeft: TMenuItem;
@@ -739,6 +740,7 @@ type
     procedure FindAndExtractRegexMatches;
     function GetFileOpenOptionsString(AFileCount: integer): string;
     procedure HandleTimerCommand(Ed: TATSynEdit; CmdCode: integer; CmdInvoke: TATEditorCommandInvoke);
+    procedure InvalidateMouseoverDependantControls;
     function IsTooManyTabsOpened: boolean;
     function GetUntitledNumberedCaption: string;
     procedure PopupBottomOnPopup(Sender: TObject);
@@ -2160,6 +2162,9 @@ var
   Frame: TEditorFrame;
   FrameKind: TAppFrameKind;
   Data: TATStatusData;
+  Pnt: TPoint;
+  mi: TMenuItem;
+  i: integer;
 begin
   Frame:= CurrentFrame;
   if Frame=nil then exit;
@@ -2245,6 +2250,21 @@ begin
           UpdateStatusbar;
         end;
       end;
+    StatusbarTag_Msg:
+      begin
+        if PopupStatusbarMsg=nil then
+          PopupStatusbarMsg:= TPopupMenu.Create(Self);
+        PopupStatusbarMsg.Items.Clear;
+        for i:= 0 to AppStatusbarMessages.Count-1 do
+        begin
+          mi:= TMenuItem.Create(Self);
+          mi.Caption:= AppStatusbarMessages[i];
+          mi.Enabled:= false;
+          PopupStatusbarMsg.Items.Add(mi);
+        end;
+        Pnt:= Mouse.CursorPos;
+        PopupStatusbarMsg.PopUp(Pnt.X, Pnt.Y);
+      end;
     21..MaxInt:
       begin
         PyStatusbarPanelClick(Sender, Data.Tag);
@@ -2315,6 +2335,9 @@ begin
   Frame:= CurrentFrame;
 
   UpdateToolbarButtons(Frame);
+
+  if not PtInRect(BoundsRect, Mouse.CursorPos) then
+    InvalidateMouseoverDependantControls;
 
   //frame requested to update statusbar
   if FNeedUpdateStatuses then
@@ -5656,14 +5679,14 @@ begin
     end;
 
     STime:= FormatDateTime('[HH:mm] ', Now);
-    while AppStatusbarMessages.Count>UiOps.MaxStatusbarMessages do
-      AppStatusbarMessages.Delete(0);
     AppStatusbarMessages.Add(STime+AText);
+    while AppStatusbarMessages.Count>UiOps.MaxMaxStatusbarMessages do
+      AppStatusbarMessages.Delete(0);
     FLastStatusbarMessage:= AText;
 
     DoStatusbarTextByTag(Status, StatusbarTag_Msg, {STime+}GetStatusbarPrefix(CurrentFrame)+AText);
     DoStatusbarColorByTag(Status, StatusbarTag_Msg, GetAppColorOfStatusbarFont);
-    DoStatusbarHintByTag(Status, StatusbarTag_Msg, AppStatusbarMessages.Text);
+    DoStatusbarHintByTag(Status, StatusbarTag_Msg, StringsTrailingText(AppStatusbarMessages, UiOps.MaxStatusbarMessages));
 
     TimerStatusClear.Enabled:= false;
     TimerStatusClear.Enabled:= true;
@@ -9204,6 +9227,23 @@ begin
     end;
   finally
     FreeAndNil(Form);
+  end;
+end;
+
+procedure TfmMain.InvalidateMouseoverDependantControls;
+var
+  i: integer;
+begin
+  for i:= 0 to Groups.PagesVisibleCount-1 do
+    Groups.Pages[i].Tabs.Invalidate;
+
+  Status.Invalidate;
+
+  if ATFlatTheme.EnableColorBgOver then
+  begin
+    ToolbarSideTop.Invalidate;
+    ToolbarSideMid.Invalidate;
+    ToolbarSideLow.Invalidate;
   end;
 end;
 
