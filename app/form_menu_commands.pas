@@ -45,6 +45,7 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure editChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -198,8 +199,8 @@ begin
   FColorFontHilite:= GetAppColor(apclListFontHilite);
   FColorFontHotkey:= GetAppColor(apclListFontHotkey);
 
-  if UiOps.ShowMenuDialogsWithBorder then
-    BorderStyle:= bsDialog;
+  //if UiOps.ShowMenuDialogsWithBorder then
+  //  BorderStyle:= bsDialog;
 
   OptShowUsual:= true;
   OptShowPlugins:= true;
@@ -238,6 +239,11 @@ begin
   FTimerShow.Enabled:= false;
   FTimerShow.Interval:= 100;
   FTimerShow.OnTimer:= @TimerShowTick;
+end;
+
+procedure TfmCommands.FormDeactivate(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TfmCommands.editChange(Sender: TObject);
