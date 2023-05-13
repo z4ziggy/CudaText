@@ -4050,6 +4050,7 @@ finalization
   FreeAndNil(AppKeymapMain);
   FreeAndNil(AppBookmarkImagelist);
 
+  AppClearPluginLists;
   FreeAndNil(AppTreeHelpers);
   FreeAndNil(AppEventList);
   FreeAndNil(AppCommandList);
@@ -4061,7 +4062,6 @@ finalization
     FreeAndNil(AppLexersLastDetected);
 
   //AppFreeListTimers; //somehow gives crash on exit, if TerminalPlus was used, in timer_proc(TIMER_DELETE...)
-  //AppClearPluginLists;
 
   {$ifdef unix}
   if Assigned(AppUniqInst) then
