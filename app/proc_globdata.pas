@@ -4051,9 +4051,9 @@ finalization
   FreeAndNil(AppBookmarkImagelist);
 
   AppClearPluginLists;
-  FreeAndNil(AppTreeHelpers);
-  FreeAndNil(AppEventList);
-  FreeAndNil(AppCommandList);
+  //FreeAndNil(AppTreeHelpers);
+  //FreeAndNil(AppEventList);
+  //FreeAndNil(AppCommandList);
   AppConsoleQueue.Push(''); // fix for #5037: Adds dummy data to avoid exception on free
   FreeAndNil(AppConsoleQueue);
   FreeAndNil(AppCommandsDelayed);
