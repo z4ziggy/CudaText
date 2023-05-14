@@ -35,6 +35,7 @@ type
     plCaption: TPanel;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
   private
@@ -78,16 +79,17 @@ var
 begin
   with TIniFile.Create(AppFile_Language) do
   try
-    STitle:= ReadString('d_f', 'go_', 'Go to');
+    STitle:= ReadString('d_f', 'go_', 'Goto');
   finally
     Free
   end;
 
   STitle:= STitle+' '+
-    Format(msgGotoDialogTooltip, [msgGotoDialogInfoExt]);
+    Format(msgGotoDialogTextHint, [msgGotoDialogInfoExt]);
 
-  Caption:= STitle;
-  plCaption.Caption:= STitle;
+  //Caption:= STitle;
+  //plCaption.Caption:= STitle;
+  edInput.OptTextHint:= STitle;
 end;
 
 procedure TfmGoto.FormShow(Sender: TObject);
@@ -114,7 +116,7 @@ begin
 
   if UiOps.ShowMenuDialogsWithBorder then
   begin
-    BorderStyle:= bsDialog;
+    //BorderStyle:= bsDialog;
     plCaption.Hide;
   end;
 
@@ -150,6 +152,11 @@ begin
   edInput.OptCaretBlinkTime:= EditorOps.OpCaretBlinkTime;
 
   IsDoubleBuffered:= UiOps.DoubleBuffered;
+end;
+
+procedure TfmGoto.FormDeactivate(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TfmGoto.ButtonCancelClick(Sender: TObject);

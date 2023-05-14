@@ -112,7 +112,8 @@ const
   msgThemeDefault: string = '(default)';
   msgThemeName: string = 'Theme name:';
   msgGotoDialogTooltip: string = '(10, 10:10, 10%%, d100, xFFF, %s)';
-  msgGotoDialogInfoExt: string = 'with "+": select';
+  msgGotoDialogTextHint: string = 'line or tag, %s';
+  msgGotoDialogInfoExt: string = '"+" to select';
   msgIgnoredCommandIfNotFocused: string = 'Ignoring the command, editor isn''t focused';
   msgSuggestOptEditor = '"Options Editor" provides the dialog - click here to open';
 

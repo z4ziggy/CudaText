@@ -1779,7 +1779,7 @@ begin
     OpCaretOnLoadingLimitByLineEnds:= true;
 
     OpKeepSelFontColor:= false;
-    OpShowCurLine:= false;
+    OpShowCurLine:= true;
     OpShowCurLineMinimal:= true;
     OpShowCurLineOnlyFocused:= false;
     OpShowCurCol:= false;
@@ -1949,7 +1949,7 @@ begin
     MaxUndoSizeForSessionFile:= 1000000;
 
     ListboxCentered:= true;
-    ListboxSizeX:= 450;
+    ListboxSizeX:= 400;
     ListboxSizeY:= 300;
     ListboxAutoCompleteWidth:= 550;
     ListboxAutoCompleteMaxItems:= 12;
@@ -1965,10 +1965,10 @@ begin
     TabMultiline:= false;
     TabAngled:= false;
     TabFlat:= false;
-    TabWidth:= 170;
+    TabWidth:= 180;
     TabWidthMin:= 40;
     TabWidthMax:= 300;
-    TabHeight:= 26;
+    TabHeight:= 32;
     TabHeightInner:= TabHeight-1;
     TabSpacer:= 2;
     TabSpaceBeforeText:= 6;

@@ -5081,6 +5081,7 @@ procedure TfmMain.DoGotoFromInput(const AInput: string);
 var
   Frame: TEditorFrame;
   Ed: TATSynEdit;
+  bOptWrapped, bChanged: boolean;
 begin
   Frame:= CurrentFrame;
   Ed:= Frame.Editor;
@@ -5097,8 +5098,30 @@ begin
     begin
       if EditorGotoFromString(Ed, AInput) then
         MsgStatus('')
-      else
-        MsgStatus(msgStatusBadLineNum);
+      else begin
+        // FIXME: This should be Tags list or something
+        // similar, but for now a simple search will do.
+
+        // FIXME
+        if SEndsWith(AInput, '+') or SBeginsWith(AInput, '+') then begin
+
+        end;
+
+        bOptWrapped := FFinder.IsSearchWrapped;
+        FFinder.StrFind:= AInput;
+        FFinder.Editor:= CurrentEditor;
+        FFinder.OptFromCaret:= true;
+        FFinder.OptBack:= false;
+        FFinder.OptWrapped:=true;
+        if FFinder.DoAction_FindOrReplace(false, false, bChanged, true) then begin
+           MsgStatus('');
+           FinderShowResult(true, FFinder);
+        end
+        else
+          MsgStatus(msgStatusBadLineNum);
+        FFinder.OptWrapped:=bOptWrapped;
+
+      end;
     end;
   end;
 
@@ -9173,7 +9196,6 @@ begin
   if Assigned(mnuEditCopyAppend) then
     mnuEditCopyAppend.Enabled:= bSel;
 end;
-
 
 procedure TfmMain.DoShowForVisibleFrames;
 var
