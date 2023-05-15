@@ -61,6 +61,7 @@ object fmCommands: TfmCommands
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False
+    ScrollStyleVert = alssAuto
     OnClick = listClick
     OnDrawItem = listDrawItem
   end

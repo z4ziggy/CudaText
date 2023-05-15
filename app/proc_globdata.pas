@@ -1949,7 +1949,7 @@ begin
     MaxUndoSizeForSessionFile:= 1000000;
 
     ListboxCentered:= true;
-    ListboxSizeX:= 400;
+    ListboxSizeX:= 450;
     ListboxSizeY:= 300;
     ListboxAutoCompleteWidth:= 550;
     ListboxAutoCompleteMaxItems:= 12;

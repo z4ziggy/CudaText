@@ -127,6 +127,10 @@ var
 begin
   Localize;
 
+  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Size:= EditorOps.OpFontSize - UiOps.ListboxHotkeyFontSizeDelta;
+  list.Font.Quality:= EditorOps.OpFontQuality;
+
   edit.Height:= ATEditorScale(UiOps.InputHeight);
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
@@ -273,7 +277,13 @@ end;
 procedure TfmCommands.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (key=VK_DOWN) or ((key=VK_J) and (Shift=[ssCtrl])) then
+  if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
+     list.Font.Size := list.Font.Size - 1;
+  end
+  else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
+     list.Font.Size := list.Font.Size + 1;
+  end
+  else if (key=VK_DOWN) or ((key=VK_J) and (Shift=[ssCtrl])) then
   begin
     if list.ItemIndex=list.ItemCount-1 then
       list.ItemIndex:= 0
@@ -454,6 +464,7 @@ begin
   _GetPrefix(strfind, 'f');
   _GetPrefix(strfind, 'r');
 
+  c.Font.Size := list.Font.Size;
   pnt:= Point(ARect.Left+4, ARect.Top);
   c.TextOut(pnt.x, pnt.y, strname);
 
@@ -519,8 +530,8 @@ begin
 
   if strkey<>'' then
   begin
-    nPrevSize:= c.Font.Size;
-    c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
+    //nPrevSize:= c.Font.Size;
+    //c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
     TextSize:= c.TextExtent(strkey);
     n:= list.ClientWidth-TextSize.cx-4;
     c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y+list.ItemHeight);
@@ -529,7 +540,7 @@ begin
       n,
       pnt.y + (list.ItemHeight-TextSize.cy) div 2,
       strkey);
-    c.Font.Size:= nPrevSize;
+    //c.Font.Size:= nPrevSize;
   end;
 end;
 
@@ -611,6 +622,9 @@ begin
   list.ItemIndex:= 0;
   list.ItemTop:= 0;
   list.VirtualItemCount:= keymapList.Count;
+  height := edit.Height +  edit.BorderSpacing.Around * 2 + Min(list.VirtualItemCount, 10) * list.ItemHeight;
+  if list.VirtualItemCount > 0 then
+     height := height + list.BorderSpacing.Around;
   list.Invalidate;
 end;
 
