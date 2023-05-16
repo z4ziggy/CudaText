@@ -760,6 +760,7 @@ function IsDefaultSession(const S: string): boolean;
 function IsDefaultSessionActive: boolean;
 
 function IsSetToOneInstance: boolean;
+function InitPyLibraryPath: string;
 
 function MsgBox(const AText: string; AFlags: Longint): integer;
 procedure MsgBadConfig(const fn, msg: string);
@@ -1284,6 +1285,11 @@ var
   N: integer;
   S: string;
 {$endif}
+{$ifdef unix}
+var
+  Dir: string;
+  FileInfo: TSearchRec;
+{$endif}
 begin
   Result:= '';
 
@@ -1335,7 +1341,22 @@ begin
   {$endif}
 
   {$ifdef unix}
-  exit('libpython3.so');
+  Dir:= cSystemLibDir;
+  if FindFirst(Dir+'/'+'libpython3.*.so.*', faAnyFile, FileInfo)=0 then
+  begin
+    Result:= Dir+'/'+FileInfo.Name;
+    FindClose(FileInfo);
+    exit;
+  end;
+
+  Dir:= cSystemLibDir+'/x86_64-linux-gnu';
+  if DirectoryExists(Dir) and
+    (FindFirst(Dir+'/'+'libpython3.*.so.*', faAnyFile, FileInfo)=0) then
+  begin
+    Result:= Dir+'/'+FileInfo.Name;
+    FindClose(FileInfo);
+    exit
+  end;
   {$endif}
 end;
 
@@ -2057,7 +2078,7 @@ begin
     TreeFillMaxTime:= 1000;
     TreeFillMaxTimeForAPI:= 6*1000;
 
-    PyLibrary:= InitPyLibraryPath;
+    PyLibrary:= '';
     PyCaretSlow:= 600;
     PyChangeSlow:= 2000;
     PyOutputCopyToStdout:= false;

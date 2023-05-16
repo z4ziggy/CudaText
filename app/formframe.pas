@@ -2509,6 +2509,7 @@ procedure TEditorFrame.SetLexer(Ed: TATSynEdit; an: TecSyntAnalyzer);
 var
   an2: TecSyntAnalyzer;
   Ada: TATAdapterEControl;
+  S: string;
 begin
   {
   //it breaks code-tree, issue #3348
@@ -2516,6 +2517,16 @@ begin
   if Assigned(ada) and Assigned(ada.Lexer) then
     if not ada.Stop then exit;
   }
+
+  if MacroRecord then
+  begin
+    if Assigned(an) then
+      S:= IntToStr(cmd_SetLexer)+','+an.LexerName
+    else
+      S:= IntToStr(cmd_SetLexer)+',';
+    if StringsTrailingText(MacroStrings, 1)<>S then
+      MacroStrings.Add(S);
+  end;
 
   if (an=nil) or IsFileTooBigForLexer(GetFileName(Ed)) then
   begin
@@ -2606,8 +2617,11 @@ begin
 end;
 
 procedure TEditorFrame.SetLexerLite(Ed: TATSynEdit; an: TATLiteLexer);
+var
+  S: string;
 begin
-  Lexer[Ed]:= nil;
+  if Lexer[Ed]<>nil then
+    Lexer[Ed]:= nil;
 
   Ed.AdapterForHilite:= an;
   Ed.Update;
@@ -2616,6 +2630,16 @@ begin
   begin
     Ed2.AdapterForHilite:= an;
     Ed2.Update;
+  end;
+
+  if MacroRecord then
+  begin
+    if Assigned(an) then
+      S:= IntToStr(cmd_SetLexer)+','+an.LexerName+msgLiteLexerSuffix
+    else
+      S:= IntToStr(cmd_SetLexer)+',';
+    if StringsTrailingText(MacroStrings, 1)<>S then
+      MacroStrings.Add(S);
   end;
 
   //to apply lexer-specific config
