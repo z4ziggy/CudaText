@@ -128,7 +128,7 @@ begin
   Localize;
 
   list.Font.Name:= EditorOps.OpFontName;
-  list.Font.Size:= EditorOps.OpFontSize - UiOps.ListboxHotkeyFontSizeDelta;
+  list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
 
   edit.Height:= ATEditorScale(UiOps.InputHeight);
@@ -169,6 +169,7 @@ begin
       edit.OnChange(nil);
   end;
 
+  list.UpdateItemHeight;
   DoFilter;
 
   if OptFocusedCommand>0 then
@@ -532,8 +533,8 @@ begin
 
   if strkey<>'' then
   begin
-    //nPrevSize:= c.Font.Size;
-    //c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
+    nPrevSize:= c.Font.Size;
+    c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
     TextSize:= c.TextExtent(strkey);
     n:= list.ClientWidth-TextSize.cx-4;
     c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y+list.ItemHeight);
@@ -542,7 +543,7 @@ begin
       n,
       pnt.y + (list.ItemHeight-TextSize.cy) div 2,
       strkey);
-    //c.Font.Size:= nPrevSize;
+    c.Font.Size:= nPrevSize;
   end;
 end;
 
