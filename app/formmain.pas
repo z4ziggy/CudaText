@@ -7153,6 +7153,7 @@ var
   List: TStringList;
   NRes, NSelected: integer;
   Ed: TATSynEdit;
+  DlgProps: TDlgMenuProps;
 begin
   Ed:= CurrentEditor;
   if Ed=nil then exit;
@@ -7170,7 +7171,15 @@ begin
       else NSelected:= 0;
     end;
 
-    NRes:= DoDialogMenuList(msgStatusbarHintEnds, List, NSelected);
+    DlgProps:= Default(TDlgMenuProps);
+    DlgProps.Caption:= msgStatusbarHintEnds;
+    DlgProps.TextHint:= 'Select ' + msgStatusbarHintEnds;
+    DlgProps.Collapse:= acsmRight;
+    DlgProps.InitialIndex:= NSelected;
+    DlgProps.ItemsText:= List.Text;
+
+    NRes:= DoDialogMenuApi(DlgProps);
+    //NRes:= DoDialogMenuList(msgStatusbarHintEnds, List, NSelected);
     if NRes>=0 then
       case NRes of
         0: Ed.DoCommand(cmd_LineEndUnix, cInvokeAppPalette);
