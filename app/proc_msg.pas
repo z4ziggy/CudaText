@@ -181,9 +181,12 @@ const
   msgEncReloadAs: string = 'Select Encoding to reload file';
   msgEncConvertTo: string = 'Select Encoding to save file';
 
-  msgEndWin = 'CRLF';
-  msgEndUnix = 'LF';
-  msgEndMac = 'CR';
+  msgEndWin = 'Windows (CRLF)';
+  msgEndUnix = 'Unix (LF)';
+  msgEndMac = 'Mac (CR)';
+  msgEndStrWin = 'CRLF';
+  msgEndStrUnix = 'LF';
+  msgEndStrMac = 'CR';
 
   msgTabsizeUseSpaces: string = 'Use spaces';
   msgTabsizeConvTabs: string = 'Convert indentation to spaces';

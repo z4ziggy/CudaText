@@ -171,7 +171,7 @@ object fmMain: TfmMain
         Caption = '-'
       end
       object mnuFileEncSub: TMenuItem
-        Caption = '&Encoding...'
+        Caption = '&Encoding'
         object mnuFileEncReload: TMenuItem
           Caption = 'Reload As'
           OnClick = mnuFileEncReloadClick
@@ -184,13 +184,13 @@ object fmMain: TfmMain
       object mnuFileEnds: TMenuItem
         Caption = 'L&ine ends'
         object mnuFileEndWin: TMenuItem
-          Caption = 'CRLF'
+          Caption = 'Windows (CRLF)'
         end
         object mnuFileEndUn: TMenuItem
-          Caption = 'LF'
+          Caption = 'Unix (LF)'
         end
         object mnuFileEndMac: TMenuItem
-          Caption = 'CR'
+          Caption = 'Mac (CR)'
         end
       end
       object SepFile4: TMenuItem

@@ -7171,13 +7171,12 @@ begin
     end;
 
     NRes:= DoDialogMenuList(msgStatusbarHintEnds, List, NSelected);
-    if NRes<0 then exit;
-
-    case NRes of
-      0: Ed.DoCommand(cmd_LineEndUnix, cInvokeAppPalette);
-      1: Ed.DoCommand(cmd_LineEndWin, cInvokeAppPalette);
-      2: Ed.DoCommand(cmd_LineEndMac, cInvokeAppPalette);
-    end;
+    if NRes>=0 then
+      case NRes of
+        0: Ed.DoCommand(cmd_LineEndUnix, cInvokeAppPalette);
+        1: Ed.DoCommand(cmd_LineEndWin, cInvokeAppPalette);
+        2: Ed.DoCommand(cmd_LineEndMac, cInvokeAppPalette);
+      end;
   finally
     FreeAndNil(List);
   end;

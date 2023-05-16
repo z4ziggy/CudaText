@@ -271,9 +271,9 @@ begin
 
   //------
   case Ed.Strings.Endings of
-    cEndWin: S:= msgEndWin;
-    cEndUnix: S:= msgEndUnix;
-    cEndMac: S:= msgEndMac;
+    cEndWin: S:= msgEndStrWin;
+    cEndUnix: S:= msgEndStrUnix;
+    cEndMac: S:= msgEndStrMac;
     else S:= '?';
   end;
   DoStatusbarTextByTag(AStatus, StatusbarTag_LineEnds, S);
