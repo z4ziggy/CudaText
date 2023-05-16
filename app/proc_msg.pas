@@ -105,6 +105,7 @@ const
   msgTooltipArrowRight: string = 'Scroll tabs right';
   msgTooltipArrowMenu: string = 'Show tabs menu';
 
+  msgDialogLexerSelect = 'Apply a lexer';
   msgUntitledEnglish = 'Untitled';
   msgUntitledTab: string = msgUntitledEnglish;
   msgAllFiles: string = 'All files';
@@ -177,8 +178,8 @@ const
   msgCopyFilenameFull: string = 'Copy full filepath';
   msgCopyCurrentLine: string = 'Copy current line';
 
-  msgEncReloadAs: string = 'Reload as';
-  msgEncConvertTo: string = 'Convert to';
+  msgEncReloadAs: string = 'Select Encoding to reload file';
+  msgEncConvertTo: string = 'Select Encoding to save file';
 
   msgEndWin = 'CRLF';
   msgEndUnix = 'LF';

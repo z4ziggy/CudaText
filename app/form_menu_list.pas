@@ -36,7 +36,7 @@ type
     plCaption: TPanel;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -60,6 +60,7 @@ type
     ResultIndex: integer;
     Items: TStringlist;
     CloseOnCtrlRelease: boolean;
+    TextHint: String;
     property OnListSelect: TAppListSelectEvent read FOnListSelect write FOnListSelect;
   end;
 
@@ -79,6 +80,8 @@ begin
   List.VirtualItemCount:= Items.Count;
   List.ItemIndex:= InitialItemIndex;
   ButtonCancel.Width:= ButtonCancel.Height;
+  list.UpdateItemHeight;
+  Height := List.BorderSpacing.Around * 2 + Min(list.VirtualItemCount, 10) * List.ItemHeight;
 end;
 
 procedure TfmMenuList.ListDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
@@ -134,8 +137,9 @@ end;
 
 procedure TfmMenuList.FormCreate(Sender: TObject);
 begin
-  if UiOps.ShowMenuDialogsWithBorder then
-    BorderStyle:= bsDialog;
+  //if UiOps.ShowMenuDialogsWithBorder then
+  //  BorderStyle:= bsDialog;
+
 
   List.DoubleBuffered:= UiOps.DoubleBuffered;
 
@@ -146,8 +150,8 @@ begin
   plCaption.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   plCaption.Font.Color:= GetAppColor(apclListFont);
 
-  self.Width:= ATEditorScale(UiOps.ListboxSizeX);
-  self.Height:= ATEditorScale(UiOps.ListboxSizeY);
+  Width := ATEditorScale(UiOps.ListboxSizeX);
+  //self.Height:= ATEditorScale(UiOps.ListboxSizeY);
 
   List.OnChangedSel:= @DoListChangedSel;
 
@@ -155,14 +159,16 @@ begin
   ResultIndex:= -1;
 end;
 
+procedure TfmMenuList.FormDeactivate(Sender: TObject);
+begin
+  ModalResult:= mrCancel;
+end;
+
 procedure TfmMenuList.ButtonCancelClick(Sender: TObject);
 begin
   ModalResult:= mrCancel;
 end;
 
-procedure TfmMenuList.FormDestroy(Sender: TObject);
-begin
-end;
 
 procedure TfmMenuList.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);

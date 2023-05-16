@@ -252,7 +252,8 @@ const
   cmd_FoldingDisable         = 2685;
   cmd_DeleteNewColorAttrs    = 2686;
 
-  cmd_MenuEnc           = 2691;
+  cmd_EncReload         = 2690;
+  cmd_EncConvert        = 2691;
   cmd_MenuEnds          = 2692;
   cmd_MenuLexers        = 2693;
 
@@ -639,7 +640,8 @@ begin
   M.Add(cmd_LineEndMac_Caret, 'change line ends, for line(s) with caret: CR', [], []);
   M.Add(cmd_LineEndDefault_Caret, 'change line ends, for line(s) with caret: default', [], []);
 
-  M.Add(cmd_MenuEnc, 'menu: encodings', [], []);
+  M.Add(cmd_EncReload, 'reload with encoding', [], []);
+  M.Add(cmd_EncConvert, 'save with encoding', [], []);
   M.Add(cmd_MenuEnds, 'menu: line ends', [], []);
   M.Add(cmd_MenuLexers, 'menu: lexers', [], []);
 
@@ -914,7 +916,8 @@ begin
     cmd_MoveTabToGroupFloating2,
     cmd_MoveTabToGroupFloating3,
 
-    cmd_MenuEnc,
+    cmd_EncReload,
+    cmd_EncConvert,
     cmd_MenuEnds,
     cmd_MenuLexers,
 
@@ -1059,7 +1062,8 @@ begin
     cmd_GroupActivateFloat1,
     cmd_GroupActivateFloat2,
     cmd_GroupActivateFloat3,
-    cmd_MenuEnc,
+    cmd_EncReload,
+    cmd_EncConvert,
     cmd_MenuEnds,
     cmd_MenuLexers,
 

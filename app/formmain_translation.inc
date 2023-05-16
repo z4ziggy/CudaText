@@ -124,11 +124,11 @@ begin
     DoLocMenuitem(ini, mnuFileCloseAll, 'm_f', 'cl_all');
     DoLocMenuitem(ini, mnuFileCloseOther, 'm_f', 'cl_oth');
     DoLocMenuitem(ini, mnuFileCloseDel, 'm_f', 'cl_del');
-    DoLocMenuitem(ini, mnuFileEnc, 'm_f', 'e_');
+    DoLocMenuitem(ini, mnuFileEncSub, 'm_f', 'e_');
     DoLocMenuitem(ini, mnuFileEnds, 'm_f', 'z_');
     DoLocMenuitem(ini, mnuFileExit, 'm_f', 'q');
 
-    DoMenuitemEllipsis(mnuFileEnc);
+    DoMenuitemEllipsis(mnuFileEncSub);
 
     msgEncReloadAs:= ini.ReadString('m_f', 'e_r', msgEncReloadAs);
     msgEncConvertTo:= ini.ReadString('m_f', 'e_t', msgEncConvertTo);

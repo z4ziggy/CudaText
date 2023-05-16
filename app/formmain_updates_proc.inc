@@ -885,7 +885,7 @@ procedure TfmMain.UpdateMenuHotkeys;
 begin
   UpdateMenuItemHotkey(mnuApple_About, cmd_HelpAbout);
 
-  UpdateMenuItemHotkey(mnuFileEnc, cmd_MenuEnc);
+  //UpdateMenuItemHotkey(mnuFileEncSub, cmd_MenuEnc);
   UpdateMenuItemHotkey(mnuFileEndWin, cmd_LineEndWin);
   UpdateMenuItemHotkey(mnuFileEndUn, cmd_LineEndUnix);
   UpdateMenuItemHotkey(mnuFileEndMac, cmd_LineEndMac);

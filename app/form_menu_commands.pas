@@ -66,7 +66,7 @@ type
     FColorFontHilite: TColor;
     FColorFontHotkey: TColor;
     PanelInfo: TStaticText;
-    procedure DoConfigKey(Cmd: integer);
+    function DoConfigKey(Cmd: integer):boolean;
     procedure DoFilter;
     procedure DoResetKey(K: TATKeymapItem);
     function GetListCaption: string;
@@ -353,8 +353,8 @@ begin
   begin
     if OptAllowConfig then
     begin
-      DoConfigKey(GetResultCmd);
-      ResultHotkeysChanged:= true;
+      Hide;
+      ResultHotkeysChanged := DoConfigKey(GetResultCmd);
     end;
     key:= 0;
     exit
@@ -372,11 +372,12 @@ begin
     Result:= 0;
 end;
 
-procedure TfmCommands.DoConfigKey(Cmd: integer);
+function TfmCommands.DoConfigKey(Cmd: integer):boolean;
 var
   SLexer: string;
   N: integer;
 begin
+  Result:=false;
   DoMsgStatus('');
 
   if not TPluginHelper.CommandHasConfigurableHotkey(Cmd) then
@@ -396,6 +397,7 @@ begin
     DoFilter;
     list.ItemIndex:= N;
   end;
+  Result:=true;
 end;
 
 procedure TfmCommands.DoResetKey(K: TATKeymapItem);

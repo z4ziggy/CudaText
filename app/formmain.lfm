@@ -1,15 +1,17 @@
 object fmMain: TfmMain
   Left = 44
-  Height = 518
+  Height = 513
   Top = 88
-  Width = 1236
+  Width = 1223
   AllowDropFiles = True
   Caption = 'CudaText'
-  ClientHeight = 518
-  ClientWidth = 1236
-  Constraints.MinHeight = 200
-  Constraints.MinWidth = 300
+  ClientHeight = 513
+  ClientWidth = 1223
+  Constraints.MinHeight = 198
+  Constraints.MinWidth = 297
   DefaultMonitor = dmDesktop
+  DesignTimePPI = 95
+  FormStyle = fsStayOnTop
   KeyPreview = True
   Menu = MainMenu
   OnActivate = FormActivate
@@ -24,11 +26,11 @@ object fmMain: TfmMain
   OnShow = FormShow
   OnUTF8KeyPress = FormUTF8KeyPress
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '2.3.0.0'
+  LCLVersion = '2.2.4.0'
   Visible = True
   object PanelSide: TATPanelSimple
     Left = 0
-    Height = 518
+    Height = 513
     Top = 0
     Width = 75
     Align = alLeft
@@ -39,7 +41,7 @@ object fmMain: TfmMain
       AnchorSideBottom.Side = asrBottom
       Left = 0
       Height = 30
-      Top = 488
+      Top = 483
       Width = 75
       Anchors = [akLeft, akBottom]
       AutoSize = True
@@ -53,7 +55,7 @@ object fmMain: TfmMain
       AnchorSideTop.Control = PanelSide
       AnchorSideBottom.Control = ToolbarSideMid
       Left = 0
-      Height = 458
+      Height = 453
       Top = 0
       Width = 75
       Anchors = [akTop, akLeft, akBottom]
@@ -72,7 +74,7 @@ object fmMain: TfmMain
       AnchorSideBottom.Control = ToolbarSideLow
       Left = 0
       Height = 30
-      Top = 458
+      Top = 453
       Width = 75
       Anchors = [akLeft, akBottom]
       AutoSize = True
@@ -84,15 +86,15 @@ object fmMain: TfmMain
   end
   object PanelAll: TATPanelSimple
     Left = 75
-    Height = 518
+    Height = 513
     Top = 0
-    Width = 1161
+    Width = 1148
     Align = alClient
     object ToolbarMain: TATFlatToolbar
       Left = 0
       Height = 24
       Top = 0
-      Width = 1161
+      Width = 1148
       Align = alTop
       AutoSize = True
       Color = clSilver
@@ -102,21 +104,21 @@ object fmMain: TfmMain
     end
     object PanelMain: TATPanelSimple
       Left = 0
-      Height = 494
+      Height = 489
       Top = 24
-      Width = 1161
+      Width = 1148
       Align = alClient
       object PanelEditors: TATPanelSimple
         Left = 0
-        Height = 494
+        Height = 489
         Top = 0
-        Width = 1161
+        Width = 1148
         Align = alClient
       end
     end
   end
   object MainMenu: TMainMenu
-    Left = 496
+    Left = 491
     Top = 16
     object mnuFile: TMenuItem
       Caption = '&File'
@@ -168,8 +170,16 @@ object fmMain: TfmMain
       object SepFile3: TMenuItem
         Caption = '-'
       end
-      object mnuFileEnc: TMenuItem
+      object mnuFileEncSub: TMenuItem
         Caption = '&Encoding...'
+        object mnuFileEncReload: TMenuItem
+          Caption = 'Reload As'
+          OnClick = mnuFileEncReloadClick
+        end
+        object mnuFileEncConvert: TMenuItem
+          Caption = 'Save As'
+          OnClick = mnuFileEncConvertClick
+        end
       end
       object mnuFileEnds: TMenuItem
         Caption = 'L&ine ends'
@@ -661,14 +671,14 @@ object fmMain: TfmMain
   object TimerStatusClear: TTimer
     Enabled = False
     OnTimer = TimerStatusClearTimer
-    Left = 240
+    Left = 238
     Top = 32
   end
   object TimerCmd: TTimer
     Enabled = False
     Interval = 150
     OnTimer = TimerCmdTimer
-    Left = 320
+    Left = 317
     Top = 16
   end
   object AppProps: TApplicationProperties
@@ -679,25 +689,25 @@ object fmMain: TfmMain
     OnQueryEndSession = AppPropsQueryEndSession
     OnModalBegin = AppPropsModalBegin
     OnDropFiles = AppPropsDropFiles
-    Left = 520
-    Top = 424
+    Left = 515
+    Top = 420
   end
   object PopupRecents: TPopupMenu
     OnPopup = PopupRecentsPopup
-    Left = 560
+    Left = 554
     Top = 32
   end
   object TimerTreeFill: TTimer
     Enabled = False
     Interval = 2000
     OnTimer = TimerTreeFillTimer
-    Left = 320
-    Top = 72
+    Left = 317
+    Top = 71
   end
   object ImageListBm: TImageList
     AllocBy = 10
-    Left = 664
-    Top = 232
+    Left = 657
+    Top = 230
     Bitmap = {
       4C7A0A00000010000000100000002D0200000000000078DAED994F4B024118C6
       FD187E003F8374113A78B54BD2A13F1008116187CC20940E5D3A441478088282
@@ -722,8 +732,8 @@ object fmMain: TfmMain
   end
   object PopupText: TPopupMenu
     OnPopup = PopupTextPopup
-    Left = 560
-    Top = 96
+    Left = 554
+    Top = 95
     object mnuTextUndo: TMenuItem
       Caption = 'Undo'
     end
@@ -762,39 +772,39 @@ object fmMain: TfmMain
     Enabled = False
     Interval = 6000
     OnTimer = TimerTooltipTimer
-    Left = 240
-    Top = 88
+    Left = 238
+    Top = 87
   end
   object ImageListSide: TImageList
     AllocBy = 8
     Height = 20
     Width = 20
-    Left = 721
-    Top = 263
+    Left = 713
+    Top = 260
   end
   object ImageListTabs: TImageList
     AllocBy = 20
-    Left = 736
-    Top = 216
+    Left = 728
+    Top = 214
   end
   object TimerAppIdle: TIdleTimer
     AutoEnabled = True
     OnTimer = TimerAppIdleTimer
-    Left = 392
-    Top = 88
+    Left = 388
+    Top = 87
   end
   object TimerStatusWork: TTimer
     Enabled = False
     Interval = 300
     OnTimer = TimerStatusWorkTimer
-    Left = 392
+    Left = 388
     Top = 32
   end
   object TimerMouseStop: TTimer
     Enabled = False
     Interval = 1400
     OnTimer = TimerMouseStopTimer
-    Left = 392
-    Top = 144
+    Left = 388
+    Top = 143
   end
 end

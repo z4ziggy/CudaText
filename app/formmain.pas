@@ -186,6 +186,7 @@ type
   TDlgMenuProps = record
     ItemsText: string;
     Caption: string;
+    TextHint: string;
     InitialIndex: integer;
     Multiline: boolean;
     NoFuzzy: boolean;
@@ -242,6 +243,8 @@ type
   { TfmMain }
   TfmMain = class(TForm)
     AppProps: TApplicationProperties;
+    mnuFileEncReload: TMenuItem;
+    mnuFileEncConvert: TMenuItem;
     mnuOpUnprinted: TMenuItem;
     mnuEditPasteHist: TMenuItem;
     mnuEditPasteIndent: TMenuItem;
@@ -307,7 +310,7 @@ type
     mnuFileEnds: TMenuItem;
     SepFile4: TMenuItem;
     mnuFileEndWin: TMenuItem;
-    mnuFileEnc: TMenuItem;
+    mnuFileEncSub: TMenuItem;
     mnuTextUndo: TMenuItem;
     mnuTextRedo: TMenuItem;
     MenuItem32: TMenuItem;
@@ -481,6 +484,8 @@ type
     procedure EditorOutput_OnClickDbl(Sender: TObject; var AHandled: boolean);
     procedure EditorOutput_OnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure mnuEditClick(Sender: TObject);
+    procedure mnuFileEncConvertClick(Sender: TObject);
+    procedure mnuFileEncReloadClick(Sender: TObject);
     procedure mnuTabColorClick(Sender: TObject);
     procedure mnuTabPinnedClick(Sender: TObject);
     procedure mnuTabCopyDirClick(Sender: TObject);
@@ -886,7 +891,7 @@ type
     function DoDialogMenuApi(const AProps: TDlgMenuProps): integer;
     procedure DoDialogMenuTranslations;
     procedure DoDialogMenuThemes;
-    procedure DoDialogMenuEncodings;
+    procedure DoDialogMenuEncodings(AReloadFile: boolean);
     procedure DoDialogMenuEnds;
     procedure DoFileExportHtml(Ed: TATSynEdit);
     function DoFileInstallZip(const fn: string; out DirTarget: string; ASilent: boolean): boolean;
@@ -2214,7 +2219,7 @@ begin
     StatusbarTag_Enc:
       begin
         if not Frame.ReadOnly[Frame.Editor] then
-          DoDialogMenuEncodings;
+          DoDialogMenuEncodings(true);
       end;
     StatusbarTag_LineEnds:
       begin
@@ -5055,7 +5060,7 @@ var
 begin
   Result:= -1;
   if AItems.Count=0 then exit;
-  Form:= TfmMenuList.Create(Self);
+  Form:= TfmMenuList.Create(nil);
   try
     UpdateInputForm(Form);
     Form.Caption:= ACaption;
@@ -5064,6 +5069,7 @@ begin
     Form.InitialItemIndex:= AInitItemIndex;
     Form.OnListSelect:= AOnListSelect;
     Form.ShowModal;
+    Application.ProcessMessages;
     Result:= Form.ResultIndex;
   finally
     FreeAndNil(Form);
@@ -7056,7 +7062,7 @@ var
   SItem: string;
   DeskRect: TRect;
 begin
-  Form:= TfmMenuApi.Create(nil);
+  Form:= TfmMenuApi.Create(self);
   try
     Sep.Init(AProps.ItemsText, #10);
     repeat
@@ -7069,6 +7075,7 @@ begin
       Form.Position:= poScreenCenter;
 
     Form.ListCaption:= AProps.Caption;
+    Form.TextHint := AProps.TextHint;
     Form.Multiline:= AProps.Multiline;
     Form.InitItemIndex:= AProps.InitialIndex;
     Form.DisableFuzzy:= AProps.NoFuzzy;
@@ -7176,11 +7183,10 @@ begin
   end;
 end;
 
-procedure TfmMain.DoDialogMenuEncodings;
+procedure TfmMain.DoDialogMenuEncodings(AReloadFile: boolean);
 var
   List: TStringList;
   NRes, NSelected, i: integer;
-  bReloadFile: boolean;
   Ed: TATSynEdit;
   SEncName: string;
   DlgProps: TDlgMenuProps;
@@ -7192,14 +7198,6 @@ begin
   List:= TStringList.Create;
   try
     List.Clear;
-    List.Add(msgEncReloadAs);
-    List.Add(msgEncConvertTo);
-
-    NRes:= DoDialogMenuList(msgStatusbarHintEnc, List, 0);
-    if NRes<0 then exit;
-    bReloadFile:= NRes=0;
-
-    List.Clear;
     NSelected:= 0;
     for i:= Low(AppEncodings) to High(AppEncodings) do
     begin
@@ -7210,14 +7208,17 @@ begin
 
     DlgProps:= Default(TDlgMenuProps);
     DlgProps.Caption:= msgStatusbarHintEnc;
+    if AReloadFile then
+      DlgProps.TextHint:= msgEncReloadAs
+    else
+      DlgProps.TextHint:= msgEncConvertTo;
     DlgProps.Collapse:= acsmRight;
     DlgProps.InitialIndex:= NSelected;
     DlgProps.ItemsText:= List.Text;
 
     NRes:= DoDialogMenuApi(DlgProps);
-    if NRes<0 then exit;
-
-    SetFrameEncoding(Ed, AppEncodings[NRes].Name, bReloadFile);
+    if NRes >= 0 then
+      SetFrameEncoding(Ed, AppEncodings[NRes].Name, AReloadFile);
   finally
     FreeAndNil(List);
   end;
@@ -8042,7 +8043,7 @@ begin
       PyMenuId_Top:
         begin
           mnuFileOpenSub:= nil;
-          mnuFileEnc:= nil;
+          mnuFileEncSub:= nil;
           mnuPlugins:= nil;
           mnuOpPlugins:= nil;
           mnuLexers:= nil;
@@ -8680,6 +8681,7 @@ begin
 
     DlgProps:= Default(TDlgMenuProps);
     DlgProps.ItemsText:= List.Text;
+    DlgProps.TextHint:= msgDialogLexerSelect;
     DlgProps.InitialIndex:= List.IndexOf(Frame.LexerName[Frame.Editor]);
     DlgProps.Caption:= SCaption;
     DlgProps.NoFuzzy:= not UiOps.ListboxFuzzySearch;
@@ -9195,6 +9197,16 @@ begin
 
   if Assigned(mnuEditCopyAppend) then
     mnuEditCopyAppend.Enabled:= bSel;
+end;
+
+procedure TfmMain.mnuFileEncConvertClick(Sender: TObject);
+begin
+  DoDialogMenuEncodings(false);
+end;
+
+procedure TfmMain.mnuFileEncReloadClick(Sender: TObject);
+begin
+  DoDialogMenuEncodings(true);
 end;
 
 procedure TfmMain.DoShowForVisibleFrames;

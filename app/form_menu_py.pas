@@ -44,6 +44,7 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure editChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -75,6 +76,7 @@ type
     DisableFullFilter: boolean;
     CollapseMode: TATCollapseStringMode;
     UseEditorFont: boolean;
+    TextHint: string;
     property Multiline: boolean read FMultiline write FMultiline;
     property ListCaption: string write SetListCaption;
   end;
@@ -89,6 +91,8 @@ procedure TfmMenuApi.FormShow(Sender: TObject);
 var
   N: integer;
 begin
+  edit.OptTextHint:= TextHint;
+
   EditorCaretShapeFromString(edit.CaretShapeNormal, EditorOps.OpCaretViewNormal);
   EditorCaretShapeFromString(edit.CaretShapeOverwrite, EditorOps.OpCaretViewOverwrite);
 
@@ -105,7 +109,7 @@ begin
     N:= Abs(N * EditorOps.OpFontSize div UiOps.VarFontSize);
 
   list.ItemHeightPercents:= N;
-
+  list.UpdateItemHeight;
   DoFilter;
 
   List.ItemIndex:= InitItemIndex; //check of index not needed
@@ -134,8 +138,8 @@ begin
   FColorFontAlt:= GetAppColor(apclListFontHotkey);
   FColorFontHilite:= GetAppColor(apclListFontHilite);
 
-  if UiOps.ShowMenuDialogsWithBorder then
-    BorderStyle:= bsDialog;
+  //if UiOps.ShowMenuDialogsWithBorder then
+  //  BorderStyle:= bsDialog;
 
   edit.DoubleBuffered:= UiOps.DoubleBuffered;
   list.DoubleBuffered:= UiOps.DoubleBuffered;
@@ -170,6 +174,11 @@ begin
   listFiltered:= TFPList.Create;
   listFiltered_Simple:= TFPList.Create;
   listFiltered_Fuzzy:= TFPList.Create;
+end;
+
+procedure TfmMenuApi.FormDeactivate(Sender: TObject);
+begin
+  ModalResult:= mrCancel;
 end;
 
 procedure TfmMenuApi.editChange(Sender: TObject);
@@ -487,6 +496,10 @@ begin
   list.ItemIndex:= 0;
   list.ItemTop:= 0;
   list.VirtualItemCount:= listFiltered.Count;
+  height := edit.Height +  edit.BorderSpacing.Around * 2 + Min(list.VirtualItemCount, 10) * list.ItemHeight;
+  if list.VirtualItemCount > 0 then
+     height := height + list.BorderSpacing.Around;
+
   list.Invalidate;
 end;
 

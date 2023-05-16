@@ -599,9 +599,13 @@ begin
     cmd_ShowFunctionHint:
       DoShowFuncHint(Ed);
 
-    cmd_MenuEnc:
+    cmd_EncReload:
       begin
-        DoDialogMenuEncodings;
+        DoDialogMenuEncodings(true);
+      end;
+    cmd_EncConvert:
+      begin
+        DoDialogMenuEncodings(false);
       end;
     cmd_MenuEnds:
       begin
