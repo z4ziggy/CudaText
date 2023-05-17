@@ -46,7 +46,7 @@ object fmAddonReport: TfmAddonReport
     Top = 6
     Width = 582
     Align = alClient
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     ItemHeight = 0
     ScrollWidth = 580
     TabOrder = 2

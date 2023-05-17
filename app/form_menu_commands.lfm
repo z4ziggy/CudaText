@@ -1,15 +1,14 @@
 object fmCommands: TfmCommands
   Left = 166
-  Height = 245
+  Height = 248
   Top = 483
-  Width = 495
+  Width = 500
   BorderIcons = [biSystemMenu, biMaximize]
   BorderStyle = bsNone
   Caption = 'Commands'
-  ClientHeight = 245
-  ClientWidth = 495
+  ClientHeight = 248
+  ClientWidth = 500
   DefaultMonitor = dmMainForm
-  DesignTimePPI = 95
   KeyPreview = True
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
@@ -19,12 +18,12 @@ object fmCommands: TfmCommands
   ShowInTaskBar = stNever
   LCLVersion = '2.2.4.0'
   object edit: TATEdit
-    Left = 6
+    Left = 3
     Height = 26
-    Top = 32
-    Width = 483
+    Top = 29
+    Width = 494
     Align = alTop
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     DoubleBuffered = True
     Font.Height = -12
     Font.Name = 'Courier New'
@@ -52,12 +51,12 @@ object fmCommands: TfmCommands
     OptUndoLimit = 200
   end
   object list: TATListbox
-    Left = 6
-    Height = 175
-    Top = 64
-    Width = 483
+    Left = 3
+    Height = 187
+    Top = 58
+    Width = 494
     Align = alClient
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False
@@ -69,16 +68,16 @@ object fmCommands: TfmCommands
     Left = 0
     Height = 26
     Top = 0
-    Width = 495
+    Width = 500
     Align = alTop
     BevelOuter = bvNone
     Caption = 'Caption'
     ClientHeight = 26
-    ClientWidth = 495
+    ClientWidth = 500
     TabOrder = 2
     Visible = False
     object ButtonCancel: TATButton
-      Left = 475
+      Left = 480
       Height = 26
       Top = 0
       Width = 20

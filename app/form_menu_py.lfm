@@ -25,7 +25,7 @@ object fmMenuApi: TfmMenuApi
     Top = 32
     Width = 483
     Align = alTop
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     DoubleBuffered = True
     Font.Height = -12
     Font.Name = 'Courier New'
@@ -58,7 +58,7 @@ object fmMenuApi: TfmMenuApi
     Top = 64
     Width = 483
     Align = alClient
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False

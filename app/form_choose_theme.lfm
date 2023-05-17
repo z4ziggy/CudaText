@@ -46,7 +46,7 @@ object fmChooseTheme: TfmChooseTheme
     Top = 6
     Width = 177
     Align = alClient
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     Caption = 'Syntax themes'
     ClientHeight = 375
     ClientWidth = 175

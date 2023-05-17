@@ -23,7 +23,7 @@ object fmMenuList: TfmMenuList
     Top = 32
     Width = 483
     Align = alClient
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False

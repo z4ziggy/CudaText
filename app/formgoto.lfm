@@ -23,7 +23,7 @@ object fmGoto: TfmGoto
     Width = 441
     Align = alTop
     Anchors = []
-    BorderSpacing.Around = 6
+    BorderSpacing.Around = 3
     BorderStyle = bsSingle
     DoubleBuffered = True
     Font.Height = -12
