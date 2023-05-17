@@ -178,7 +178,7 @@ const
   msgCopyFilenameFull: string = 'Copy full filepath';
   msgCopyCurrentLine: string = 'Copy current line';
 
-  msgEncReloadAs: string = 'Select Encoding to reload file';
+  msgEncReloadAs: string = 'Select Encoding for current file';
   msgEncConvertTo: string = 'Select Encoding to save file';
 
   msgEndWin = 'Windows (CRLF)';

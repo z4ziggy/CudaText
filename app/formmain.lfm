@@ -173,11 +173,11 @@ object fmMain: TfmMain
       object mnuFileEncSub: TMenuItem
         Caption = '&Encoding'
         object mnuFileEncReload: TMenuItem
-          Caption = 'Reload As'
+          Caption = 'Reload file'
           OnClick = mnuFileEncReloadClick
         end
         object mnuFileEncConvert: TMenuItem
-          Caption = 'Save As'
+          Caption = 'Save file'
           OnClick = mnuFileEncConvertClick
         end
       end
