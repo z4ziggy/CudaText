@@ -42,7 +42,7 @@ object fmCommands: TfmCommands
     OptCaretVirtual = False
     OptGutterVisible = False
     OptBorderVisible = False
-    OptBorderWidth = 10
+    OptBorderWidth = 8
     OptRulerVisible = False
     OptMarginRight = 1000
     OptUnprintedVisible = False

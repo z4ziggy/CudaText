@@ -110,7 +110,7 @@ begin
   c.Font.Color:= NColorFont;
   c.FillRect(ARect);
 
-  pnt:= Point(ARect.Left+4, ARect.Top+10);
+  pnt:= Point(ARect.Left+4, ARect.Top+8);
   c.TextOut(pnt.x, pnt.y, str1);
 
   c.Font.Color:= FColorFontAlt;
