@@ -5016,6 +5016,7 @@ begin
       fmCommands.Height:= AProps.H;
 
     fmCommands.ShowModal;
+    Application.ProcessMessages;
 
     UiOps.CmdPaletteFilterText:= fmCommands.CurrentFilterText;
     Result:= fmCommands.ResultCommand;

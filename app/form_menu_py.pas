@@ -91,7 +91,10 @@ procedure TfmMenuApi.FormShow(Sender: TObject);
 var
   N: integer;
 begin
-  edit.OptTextHint:= TextHint;
+  if Length(TextHint) >0 then
+  edit.OptTextHint:= TextHint
+  else
+    edit.OptTextHint:= Caption;
 
   EditorCaretShapeFromString(edit.CaretShapeNormal, EditorOps.OpCaretViewNormal);
   EditorCaretShapeFromString(edit.CaretShapeOverwrite, EditorOps.OpCaretViewOverwrite);
