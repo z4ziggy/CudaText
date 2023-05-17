@@ -281,8 +281,10 @@ procedure TfmCommands.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
+    if list.Font.Size > 1 then  begin
      list.Font.Size := list.Font.Size - 1;
      list.ItemHeight:= list.ItemHeight -1;
+    end;
   end
   else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
      list.Font.Size := list.Font.Size + 1;
