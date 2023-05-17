@@ -110,7 +110,7 @@ begin
   c.Font.Color:= NColorFont;
   c.FillRect(ARect);
 
-  pnt:= Point(ARect.Left+4, ARect.Top+1);
+  pnt:= Point(ARect.Left+4, ARect.Top+10);
   c.TextOut(pnt.x, pnt.y, str1);
 
   c.Font.Color:= FColorFontAlt;
@@ -154,6 +154,7 @@ begin
   //self.Height:= ATEditorScale(UiOps.ListboxSizeY);
 
   List.OnChangedSel:= @DoListChangedSel;
+  List.ItemHeight := ATEditorScale(UiOps.InputHeight+10);
 
   Items:= nil;
   ResultIndex:= -1;

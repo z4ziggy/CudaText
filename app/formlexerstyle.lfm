@@ -21,7 +21,7 @@ object fmLexerStyle: TfmLexerStyle
     Width = 442
     Align = alTop
     AutoSize = True
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     BevelOuter = bvNone
     ClientHeight = 276
     ClientWidth = 442

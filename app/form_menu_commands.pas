@@ -130,8 +130,9 @@ begin
   list.Font.Name:= EditorOps.OpFontName;
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
+  list.ItemHeight:=edit.Height+edit.OptBorderWidth;
 
-  edit.Height:= ATEditorScale(UiOps.InputHeight);
+  edit.Height:= ATEditorScale(UiOps.InputHeight) + edit.OptBorderWidth;
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
@@ -155,6 +156,7 @@ begin
   edit.Colors.TextSelFont:= GetAppColor(apclEdSelFont);
   edit.Colors.TextSelBG:= GetAppColor(apclEdSelBg);
   edit.Colors.BorderLine:= GetAppColor(apclEdBorder);
+  edit.Colors.BorderParentBG:= GetAppColor(apclEdBorder);
   list.Color:= FColorBg;
   PanelInfo.Font.Color:= FColorFont;
 
@@ -280,9 +282,11 @@ procedure TfmCommands.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
      list.Font.Size := list.Font.Size - 1;
+     list.ItemHeight:= list.ItemHeight -1;
   end
   else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
      list.Font.Size := list.Font.Size + 1;
+     list.ItemHeight:= list.ItemHeight +1;
   end
   else if (key=VK_DOWN) or ((key=VK_J) and (Shift=[ssCtrl])) then
   begin
@@ -436,6 +440,7 @@ var
   bFound: boolean;
   cl: TColor;
   n, nPrevSize, i: integer;
+  CRect:TRect;
 begin
   if (AIndex<0) or (AIndex>=keymapList.Count) then exit;
 
@@ -449,9 +454,13 @@ begin
     cl:= FColorBg;
     c.Font.Color:= FColorFont;
   end;
+
   c.Brush.Color:= cl;
   c.Pen.Color:= cl;
-  c.FillRect(ARect);
+  CRect := TRect.Create(ARect);
+  if list.Scrollbar.IsVisible then
+     CRect.Right:= CRect.Right-list.BorderSpacing.Around;
+  c.FillRect(CRect);
 
   //name, key
   strname:= TATKeymapItem(keymapList[AIndex]).Name;
@@ -468,7 +477,7 @@ begin
   _GetPrefix(strfind, 'r');
 
   c.Font.Size := list.Font.Size;
-  pnt:= Point(ARect.Left+4, ARect.Top);
+  pnt:= Point(CRect.Left+4, CRect.Top+edit.OptBorderWidth);
   c.TextOut(pnt.x, pnt.y, strname);
 
   c.Font.Color:= FColorFontHilite;
@@ -492,7 +501,7 @@ begin
           pnt.x+n,
           pnt.y,
           pnt.x+n+c.TextWidth(buf),
-          ARect.Bottom
+          CRect.Bottom
           );
         ExtTextOut(c.Handle,
           RectClip.Left,
@@ -516,7 +525,7 @@ begin
           pnt.x+n,
           pnt.y,
           pnt.x+n+c.TextWidth(buf),
-          ARect.Bottom
+          CRect.Bottom
           );
         ExtTextOut(c.Handle,
           RectClip.Left,
@@ -533,17 +542,19 @@ begin
 
   if strkey<>'' then
   begin
+    c.Font.Bold:= true;
     nPrevSize:= c.Font.Size;
     c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
     TextSize:= c.TextExtent(strkey);
-    n:= list.ClientWidth-TextSize.cx-4;
-    c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y+list.ItemHeight);
+    n:= list.ClientWidth-TextSize.cx-4-list.BorderSpacing.Around;
+    //c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y+list.ItemHeight);
     c.Font.Color:= FColorFontHotkey;
     c.TextOut(
       n,
-      pnt.y + (list.ItemHeight-TextSize.cy) div 2,
+      pnt.y + (list.ItemHeight-TextSize.cy) div 2 - 3,
       strkey);
     c.Font.Size:= nPrevSize;
+    c.Font.Bold:= false;
   end;
 end;
 

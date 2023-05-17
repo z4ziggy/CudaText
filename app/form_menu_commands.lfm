@@ -18,12 +18,12 @@ object fmCommands: TfmCommands
   ShowInTaskBar = stNever
   LCLVersion = '2.2.4.0'
   object edit: TATEdit
-    Left = 3
+    Left = 4
     Height = 26
-    Top = 29
-    Width = 494
+    Top = 30
+    Width = 492
     Align = alTop
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     DoubleBuffered = True
     Font.Height = -12
     Font.Name = 'Courier New'
@@ -41,6 +41,8 @@ object fmCommands: TfmCommands
     OptCaretManyAllowed = False
     OptCaretVirtual = False
     OptGutterVisible = False
+    OptBorderVisible = False
+    OptBorderWidth = 10
     OptRulerVisible = False
     OptMarginRight = 1000
     OptUnprintedVisible = False
@@ -51,12 +53,12 @@ object fmCommands: TfmCommands
     OptUndoLimit = 200
   end
   object list: TATListbox
-    Left = 3
-    Height = 187
-    Top = 58
-    Width = 494
+    Left = 4
+    Height = 184
+    Top = 60
+    Width = 492
     Align = alClient
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False

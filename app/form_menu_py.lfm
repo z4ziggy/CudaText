@@ -1,16 +1,15 @@
 object fmMenuApi: TfmMenuApi
   Left = 165
-  Height = 245
+  Height = 248
   Top = 469
-  Width = 495
+  Width = 500
   ActiveControl = edit
   BorderIcons = [biSystemMenu, biMaximize]
   BorderStyle = bsNone
   Caption = 'Menu'
-  ClientHeight = 245
-  ClientWidth = 495
+  ClientHeight = 248
+  ClientWidth = 500
   DefaultMonitor = dmMainForm
-  DesignTimePPI = 95
   KeyPreview = True
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
@@ -20,12 +19,12 @@ object fmMenuApi: TfmMenuApi
   ShowInTaskBar = stNever
   LCLVersion = '2.2.4.0'
   object edit: TATEdit
-    Left = 6
+    Left = 4
     Height = 26
-    Top = 32
-    Width = 483
+    Top = 30
+    Width = 492
     Align = alTop
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     DoubleBuffered = True
     Font.Height = -12
     Font.Name = 'Courier New'
@@ -43,6 +42,8 @@ object fmMenuApi: TfmMenuApi
     OptCaretManyAllowed = False
     OptCaretVirtual = False
     OptGutterVisible = False
+    OptBorderVisible = False
+    OptBorderWidth = 10
     OptRulerVisible = False
     OptMarginRight = 1000
     OptUnprintedVisible = False
@@ -53,12 +54,12 @@ object fmMenuApi: TfmMenuApi
     OptUndoLimit = 200
   end
   object list: TATListbox
-    Left = 6
-    Height = 175
-    Top = 64
-    Width = 483
+    Left = 4
+    Height = 184
+    Top = 60
+    Width = 492
     Align = alClient
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     OwnerDrawn = True
     ParentColor = False
     ParentFont = False
@@ -70,15 +71,15 @@ object fmMenuApi: TfmMenuApi
     Left = 0
     Height = 26
     Top = 0
-    Width = 495
+    Width = 500
     Align = alTop
     BevelOuter = bvNone
     Caption = 'Caption'
     ClientHeight = 26
-    ClientWidth = 495
+    ClientWidth = 500
     TabOrder = 2
     object ButtonCancel: TATButton
-      Left = 475
+      Left = 480
       Height = 26
       Top = 0
       Width = 20

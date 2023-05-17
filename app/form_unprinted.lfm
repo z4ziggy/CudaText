@@ -92,7 +92,7 @@ object fmUnprinted: TfmUnprinted
     Top = 288
     Width = 456
     Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     BevelOuter = bvNone
     Color = clBtnShadow
     ParentColor = False
@@ -124,7 +124,7 @@ object fmUnprinted: TfmUnprinted
     Width = 98
     Anchors = [akRight, akBottom]
     AutoSize = True
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     Cancel = True
     Caption = 'Cancel'
     Constraints.MinWidth = 98

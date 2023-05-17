@@ -60,7 +60,7 @@ object fmKeys: TfmKeys
       Width = 48
       Anchors = [akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       Caption = 'Cancel'
       OnClick = bCancelInputClick
       TabOrder = 0

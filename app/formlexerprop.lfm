@@ -329,7 +329,7 @@ object fmLexerProp: TfmLexerProp
         Top = 6
         Width = 176
         Align = alLeft
-        BorderSpacing.Around = 3
+        BorderSpacing.Around = 4
         ItemHeight = 0
         OnClick = ListStylesClick
         ScrollWidth = 174
@@ -342,7 +342,7 @@ object fmLexerProp: TfmLexerProp
         Top = 6
         Width = 456
         Align = alClient
-        BorderSpacing.Around = 3
+        BorderSpacing.Around = 4
         BevelOuter = bvNone
         ClientHeight = 459
         ClientWidth = 456
@@ -601,7 +601,7 @@ object fmLexerProp: TfmLexerProp
         Align = alBottom
         Alignment = taCenter
         AutoSize = False
-        BorderSpacing.Around = 3
+        BorderSpacing.Around = 4
         Caption = 'Option "ui_lexer_themes" is on, so styles are used from current syntax-theme, not from this dialog.'
         ParentColor = False
         WordWrap = True
@@ -617,7 +617,7 @@ object fmLexerProp: TfmLexerProp
         Top = 6
         Width = 607
         Align = alClient
-        BorderSpacing.Around = 3
+        BorderSpacing.Around = 4
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0

@@ -24,7 +24,7 @@ object fmCharmaps: TfmCharmaps
     Width = 504
     Align = alClient
     AutoEdit = False
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     DefaultDrawing = False
     DefaultRowHeight = 24
     ExtendedSelect = False
@@ -54,7 +54,7 @@ object fmCharmaps: TfmCharmaps
       Top = 6
       Width = 360
       Anchors = [akLeft, akBottom]
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       DropDownCount = 30
       ItemHeight = 0
       OnChange = comboUnicodeChange
@@ -69,7 +69,7 @@ object fmCharmaps: TfmCharmaps
       Top = 10
       Width = 360
       Anchors = [akLeft, akBottom]
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       DropDownCount = 30
       ItemHeight = 0
       ItemIndex = 0
@@ -127,7 +127,7 @@ object fmCharmaps: TfmCharmaps
       Width = 80
       Anchors = [akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       Caption = 'Close'
       Constraints.MinWidth = 80
       OnClick = btnCloseClick
@@ -153,7 +153,7 @@ object fmCharmaps: TfmCharmaps
       Width = 64
       Anchors = [akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       Caption = '&1: ANSI'
       OnClick = btnAnsiClick
       TabOrder = 0
@@ -168,7 +168,7 @@ object fmCharmaps: TfmCharmaps
       Width = 86
       Anchors = [akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       Caption = '&2: Unicode'
       OnClick = btnUnicodeClick
       TabOrder = 1

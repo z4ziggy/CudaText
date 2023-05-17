@@ -248,6 +248,7 @@ type
     mnuOpUnprinted: TMenuItem;
     mnuEditPasteHist: TMenuItem;
     mnuEditPasteIndent: TMenuItem;
+    mnuTab: TMenuItem;
     mnuViewSplitNo: TMenuItem;
     mnuViewSplitV: TMenuItem;
     mnuViewSplitH: TMenuItem;
@@ -261,6 +262,7 @@ type
     mnuViewFloatSide: TMenuItem;
     mnuViewFloatBottom: TMenuItem;
     mnuOpDefaultUser: TMenuItem;
+    Separator1: TMenuItem;
     TimerMouseStop: TTimer;
     TimerStatusWork: TTimer;
     TimerAppIdle: TIdleTimer;

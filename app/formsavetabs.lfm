@@ -79,7 +79,7 @@ object fmSaveTabs: TfmSaveTabs
       Width = 90
       Anchors = [akTop, akRight]
       AutoSize = True
-      BorderSpacing.Around = 3
+      BorderSpacing.Around = 4
       Cancel = True
       Caption = '&Cancel'
       Constraints.MinWidth = 90

@@ -24,7 +24,7 @@ object fmTabSplit: TfmTabSplit
     Width = 80
     Anchors = [akRight, akBottom]
     AutoSize = True
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     Cancel = True
     Caption = 'OK'
     Constraints.MinWidth = 80
@@ -85,7 +85,7 @@ object fmTabSplit: TfmTabSplit
     ShowSelRange = False
     TickStyle = tsNone
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Around = 3
+    BorderSpacing.Around = 4
     TabOrder = 3
   end
 end

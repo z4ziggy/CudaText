@@ -17,14 +17,13 @@ object fmGoto: TfmGoto
   Scaled = False
   object edInput: TATEdit
     AnchorSideBottom.Side = asrBottom
-    Left = 6
+    Left = 4
     Height = 28
-    Top = 32
-    Width = 441
+    Top = 30
+    Width = 445
     Align = alTop
     Anchors = []
-    BorderSpacing.Around = 3
-    BorderStyle = bsSingle
+    BorderSpacing.Around = 4
     DoubleBuffered = True
     Font.Height = -12
     Font.Name = 'Courier New'
@@ -41,6 +40,8 @@ object fmGoto: TfmGoto
     OptCaretManyAllowed = False
     OptCaretVirtual = False
     OptGutterVisible = False
+    OptBorderVisible = False
+    OptBorderWidth = 10
     OptRulerVisible = False
     OptMarginRight = 1000
     OptUnprintedVisible = False

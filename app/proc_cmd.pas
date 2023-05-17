@@ -253,6 +253,9 @@ const
   cmd_FoldingDisable         = 2685;
   cmd_DeleteNewColorAttrs    = 2686;
 
+  cmd_EditUndo               = 2687;
+  cmd_EditRedo               = 2688;
+
   cmd_EncReload         = 2690;
   cmd_EncConvert        = 2691;
   cmd_MenuEnds          = 2692;
@@ -451,6 +454,9 @@ begin
   M.Add(cmd_FileReopenRecent, 'file: reopen recent file', [], []);
   M.Add(cmd_OpenContainingFolder, 'file: open folder containing the current file', [], []);
   M.Add(cmd_OpenFileInDefaultApp, 'file: open file in default application', [], []);
+
+  M.Add(cmd_EditUndo, 'edit: undo latest operation', [scXControl+VK_Z], []);
+  M.Add(cmd_EditRedo, 'edit: redo latest operation', [scXControl+scShift+VK_Z], []);
 
   M.Add(cmd_OpsReloadAndApply, 'settings: reload/apply config', [], []);
   M.Add(cmd_OpsClearRecent, 'settings: clear recent files history', [], []);

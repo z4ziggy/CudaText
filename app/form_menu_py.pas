@@ -92,7 +92,7 @@ var
   N: integer;
 begin
   if Length(TextHint) >0 then
-  edit.OptTextHint:= TextHint
+    edit.OptTextHint:= TextHint
   else
     edit.OptTextHint:= Caption;
 
@@ -150,7 +150,7 @@ begin
   list.Color:= FColorBg;
 
   edit.Keymap:= AppKeymapMain;
-  edit.Height:= ATEditorScale(UiOps.InputHeight);
+  edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
@@ -159,6 +159,8 @@ begin
   edit.Colors.TextSelFont:= GetAppColor(apclEdSelFont);
   edit.Colors.TextSelBG:= GetAppColor(apclEdSelBg);
   edit.Colors.BorderLine:= GetAppColor(apclEdBorder);
+
+  list.ItemHeight:= edit.Height;
 
   edit.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
   edit.OptCaretBlinkTime:= EditorOps.OpCaretBlinkTime;
@@ -295,7 +297,7 @@ var
   s_dots: string;
   cl: TColor;
   pnt: TPoint;
-  RectClip: TRect;
+  RectClip,CRect: TRect;
   bCurrentFuzzy: boolean;
   bFound: boolean;
   nPosOfDots: integer;
@@ -347,23 +349,26 @@ begin
   end;
   c.Brush.Color:= cl;
   c.Pen.Color:= cl;
-  c.FillRect(ARect);
+  CRect := TRect.Create(ARect);
+  if list.Scrollbar.IsVisible then
+     CRect.Right:= CRect.Right-list.BorderSpacing.Around;
+  c.FillRect(CRect);
 
   if not FMultiline then
   begin
     //right part
-    n:= ARect.Width div 2;
+    n:= CRect.Width div 2;
     s_right:= CanvasCollapseStringByDots(C, part_R, acsmLeft, n);
 
     //left part
     //less space for name if part_R long
-    n:= ARect.Width - C.TextWidth(s_right) - 2*IndentFor1stLine;
+    n:= CRect.Width - C.TextWidth(s_right) - 2*IndentFor1stLine;
     s_name:= part_L;
     s_name2:= CanvasCollapseStringByDots(C, part_L, CollapseMode, n);
   end
   else
   begin
-    n:= ARect.Width;
+    n:= CRect.Width;
 
     //right part
     s_right:= CanvasCollapseStringByDots(C, part_R, CollapseMode, n - IndentFor2ndLine);
@@ -388,8 +393,8 @@ begin
   if bCurrentFuzzy and (s_name<>s_name2) then
     bCurrentFuzzy:= false;
 
-  pnt.x:= ARect.Left+IndentFor1stLine;
-  pnt.y:= ARect.Top+1;
+  pnt.x:= CRect.Left+IndentFor1stLine;
+  pnt.y:= CRect.Top+edit.OptBorderWidth;
   c.TextOut(pnt.x, pnt.y, s_name2);
 
   c.Font.Color:= FColorFontHilite;
@@ -415,7 +420,7 @@ begin
           pnt.x+n,
           pnt.y,
           pnt.x+n+c.TextWidth(buf),
-          ARect.Bottom
+          CRect.Bottom
           );
         ExtTextOut(c.Handle,
           RectClip.Left,
@@ -441,7 +446,7 @@ begin
           pnt.x+n,
           pnt.y,
           pnt.x+n+c.TextWidth(buf),
-          ARect.Bottom
+          CRect.Bottom
           );
         ExtTextOut(c.Handle,
           RectClip.Left,
@@ -460,13 +465,13 @@ begin
   begin
     if not FMultiline then
     begin
-      pnt.x:= ARect.Right-IndentFor1stLine-c.TextWidth(s_right) + 2;
+      pnt.x:= CRect.Right-IndentFor1stLine-c.TextWidth(s_right) + 2;
       //right part is painted over left part, so clear the space
-      c.FillRect(pnt.x, pnt.y, ARect.Right, pnt.y+list.ItemHeight-1);
+      c.FillRect(pnt.x, pnt.y, CRect.Right, pnt.y+list.ItemHeight-1);
     end
     else
     begin
-      pnt.x:= ARect.Left+IndentFor2ndLine;
+      pnt.x:= CRect.Left+IndentFor2ndLine;
       Inc(pnt.y, list.ItemHeight div 2);
     end;
 
