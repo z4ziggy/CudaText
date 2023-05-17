@@ -3440,6 +3440,31 @@ begin
     end;
     exit;
   end;
+
+  // FIXME:
+  // 1. for some reason not all tabs are refreshed correctly
+  // 2. caret needs resizing
+  if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
+    if EditorOps.OpFontSize > 1 then  begin
+     Dec(EditorOps.OpFontSize);
+     for N:= 0 to FrameCount-1 do
+     with Frames[N] do begin
+       Ed1.Font.Size:= EditorOps.OpFontSize;
+       Ed2.Font.Size:= EditorOps.OpFontSize;
+     end;
+     Application.ProcessMessages;
+    end;
+  end
+  else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
+     Inc(EditorOps.OpFontSize);
+     for N:= 0 to FrameCount-1 do
+       with Frames[N] do begin
+         Ed1.Font.Size:= EditorOps.OpFontSize;
+         Ed2.Font.Size:= EditorOps.OpFontSize;
+       end;
+     Application.ProcessMessages;
+  end;
+
 end;
 
 procedure TfmMain.FormResize(Sender: TObject);
