@@ -1975,7 +1975,7 @@ begin
     ListboxAutoCompleteWidth:= 550;
     ListboxAutoCompleteMaxItems:= 12;
     ListboxFuzzySearch:= true;
-    ListboxHotkeyFontSizeDelta:= 0; //2 gives too small hotkey font on Lin/Win
+    ListboxHotkeyFontSizeDelta:= 2;
     ListboxTopItemIndent:= 4; //listbox TopItem will be ItemIndex-N
 
     TabsShowFoldersSuffix:= true;
