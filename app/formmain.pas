@@ -3441,26 +3441,27 @@ begin
     exit;
   end;
 
-  // FIXME:
-  // 1. for some reason not all tabs are refreshed correctly
-  // 2. caret needs resizing
   if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
-    if EditorOps.OpFontSize > 1 then  begin
-     Dec(EditorOps.OpFontSize);
      for N:= 0 to FrameCount-1 do
      with Frames[N] do begin
-       Ed1.Font.Size:= EditorOps.OpFontSize;
-       Ed2.Font.Size:= EditorOps.OpFontSize;
+       Ed1.DoCommand(cCommand_ZoomOut, cInvokeAppInternal);
+       Ed1.DoCommand(cCommand_ZoomOut, cInvokeAppInternal);
      end;
      Application.ProcessMessages;
-    end;
   end
   else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
-     Inc(EditorOps.OpFontSize);
      for N:= 0 to FrameCount-1 do
        with Frames[N] do begin
-         Ed1.Font.Size:= EditorOps.OpFontSize;
-         Ed2.Font.Size:= EditorOps.OpFontSize;
+         Ed1.DoCommand(cCommand_ZoomIn, cInvokeAppInternal);
+         Ed1.DoCommand(cCommand_ZoomIn, cInvokeAppInternal);
+       end;
+     Application.ProcessMessages;
+  end
+  else if (Shift = [ssCtrl]) and (key = VK_0) then begin
+     for N:= 0 to FrameCount-1 do
+       with Frames[N] do begin
+         Ed1.DoCommand(cCommand_ZoomReset, cInvokeAppInternal);
+         Ed1.DoCommand(cCommand_ZoomReset, cInvokeAppInternal);
        end;
      Application.ProcessMessages;
   end;
