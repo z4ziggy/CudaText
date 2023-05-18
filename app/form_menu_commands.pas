@@ -551,7 +551,7 @@ begin
     c.Font.Size:= nPrevSize-UiOps.ListboxHotkeyFontSizeDelta;
     TextSize:= c.TextExtent(strkey);
     n:= list.ClientWidth-TextSize.cx-4-list.BorderSpacing.Around;
-    c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y+list.ItemHeight);
+    c.FillRect(n-2, pnt.y, list.ClientWidth, pnt.y);
     c.Font.Color:= FColorFontHotkey;
     c.TextOut(
       n,
