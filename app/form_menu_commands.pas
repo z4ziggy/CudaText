@@ -189,8 +189,6 @@ begin
     edit.OptTextHint:= msgCmdPaletteTextHint;
 
   FTimerShow.Enabled:= true;
-
-  Top := Top + 6;
 end;
 
 procedure TfmCommands.listClick(Sender: TObject);

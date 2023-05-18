@@ -118,7 +118,6 @@ begin
   List.ItemIndex:= InitItemIndex; //check of index not needed
 
   ButtonCancel.Width:= ButtonCancel.Height;
-  Top := Top + 6;
 end;
 
 procedure TfmMenuApi.listClick(Sender: TObject);

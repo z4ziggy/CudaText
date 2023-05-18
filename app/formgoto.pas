@@ -129,7 +129,6 @@ begin
   edInput.Text:= '';
 
   ButtonCancel.Width:= ButtonCancel.Height;
-  Top := Top + 6;
 end;
 
 procedure TfmGoto.SetIsDoubleBuffered(AValue: boolean);

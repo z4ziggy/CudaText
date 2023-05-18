@@ -82,7 +82,6 @@ begin
   ButtonCancel.Width:= ButtonCancel.Height;
   list.UpdateItemHeight;
   Height := List.BorderSpacing.Around * 2 + Min(list.VirtualItemCount, 10) * List.ItemHeight;
-  Top := Top + 6;
 end;
 
 procedure TfmMenuList.ListDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
