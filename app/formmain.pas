@@ -3442,28 +3442,19 @@ begin
   end;
 
   if (Shift = [ssCtrl]) and (key = VK_OEM_MINUS) then begin
-     for N:= 0 to FrameCount-1 do
-     with Frames[N] do begin
-       Ed1.DoCommand(cCommand_ZoomOut, cInvokeAppInternal);
-       Ed1.DoCommand(cCommand_ZoomOut, cInvokeAppInternal);
-     end;
-     Application.ProcessMessages;
+    Ed:= CurrentEditor;
+    if Assigned(Ed) then
+       Ed.DoCommand(cCommand_ZoomOut, cInvokeAppInternal);
   end
   else if (Shift = [ssCtrl]) and (key = VK_OEM_PLUS) then begin
-     for N:= 0 to FrameCount-1 do
-       with Frames[N] do begin
-         Ed1.DoCommand(cCommand_ZoomIn, cInvokeAppInternal);
-         Ed1.DoCommand(cCommand_ZoomIn, cInvokeAppInternal);
-       end;
-     Application.ProcessMessages;
+    Ed:= CurrentEditor;
+    if Assigned(Ed) then
+       Ed.DoCommand(cCommand_ZoomIn, cInvokeAppInternal);
   end
   else if (Shift = [ssCtrl]) and (key = VK_0) then begin
-     for N:= 0 to FrameCount-1 do
-       with Frames[N] do begin
-         Ed1.DoCommand(cCommand_ZoomReset, cInvokeAppInternal);
-         Ed1.DoCommand(cCommand_ZoomReset, cInvokeAppInternal);
-       end;
-     Application.ProcessMessages;
+    Ed:= CurrentEditor;
+    if Assigned(Ed) then
+       Ed.DoCommand(cCommand_ZoomReset, cInvokeAppInternal);
   end;
 
 end;
