@@ -5467,7 +5467,12 @@ begin
     MsgLogConsole(msgCannotInitPython2);
     if msgCannotInitPython2b<>'' then
       MsgLogConsole(msgCannotInitPython2b);
-    DisablePluginMenuItems({$if defined(windows) or defined(darwin)}false{$else}UiOps.PyLibrary<>''{$endif});
+    DisablePluginMenuItems(
+      {$if defined(windows) or defined(darwin)}
+      false
+      {$else}
+      true //UiOps.PyLibrary<>''
+      {$endif});
     exit;
   end;
 
@@ -8876,8 +8881,8 @@ begin
   exit;
   {$endif}
 
-  //with empty value of "pylib", disable "find python library" command
-  if UiOps.PyLibrary='' then exit;
+  ////with empty value of "pylib", disable "find python library" command
+  //if UiOps.PyLibrary='' then exit;
 
   SDir:= cSystemLibDir;
   if not InputQuery(msgPythonFindCaption, msgPythonFindFromDir, SDir) then exit;
