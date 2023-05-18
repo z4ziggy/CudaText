@@ -97,7 +97,7 @@ begin
   edInput.Font.Name:= EditorOps.OpFontName;
   edInput.Font.Size:= EditorOps.OpFontSize;
   edInput.Font.Quality:= EditorOps.OpFontQuality;
-  edInput.OptBorderWidth:= edInput.Font.Size + 2 ;
+  edInput.OptBorderWidth:= edInput.Font.Size + 6 ;
   edInput.Height:= ATEditorScale(edInput.Font.Size+edInput.OptBorderWidth);
   //edInput.Height:= ATEditorScale(UiOps.InputHeight+edInput.OptBorderWidth);
 
@@ -129,6 +129,7 @@ begin
   edInput.Text:= '';
 
   ButtonCancel.Width:= ButtonCancel.Height;
+  Top := Top + 6;
 end;
 
 procedure TfmGoto.SetIsDoubleBuffered(AValue: boolean);

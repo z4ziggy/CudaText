@@ -118,6 +118,7 @@ begin
   List.ItemIndex:= InitItemIndex; //check of index not needed
 
   ButtonCancel.Width:= ButtonCancel.Height;
+  Top := Top + 6;
 end;
 
 procedure TfmMenuApi.listClick(Sender: TObject);
@@ -158,7 +159,7 @@ begin
   edit.Colors.TextSelFont:= GetAppColor(apclEdSelFont);
   edit.Colors.TextSelBG:= GetAppColor(apclEdSelBg);
   edit.Colors.BorderLine:= GetAppColor(apclEdBorder);
-  edit.OptBorderWidth:= edit.Font.Size + 2;
+  edit.OptBorderWidth:= edit.Font.Size + 6;
   edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
   //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 

@@ -130,7 +130,7 @@ begin
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
-  edit.OptBorderWidth:= edit.Font.Size + 2;
+  edit.OptBorderWidth:= edit.Font.Size + 6;
   edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
   //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
@@ -140,7 +140,7 @@ begin
   list.Font.Name:= EditorOps.OpFontName;
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
-  list.ItemHeight:=edit.Height;//+edit.OptBorderWidth;
+  list.ItemHeight:=edit.Height;
 
   EditorCaretShapeFromString(edit.CaretShapeNormal, EditorOps.OpCaretViewNormal);
   EditorCaretShapeFromString(edit.CaretShapeOverwrite, EditorOps.OpCaretViewOverwrite);
@@ -189,6 +189,8 @@ begin
     edit.OptTextHint:= msgCmdPaletteTextHint;
 
   FTimerShow.Enabled:= true;
+
+  Top := Top + 6;
 end;
 
 procedure TfmCommands.listClick(Sender: TObject);

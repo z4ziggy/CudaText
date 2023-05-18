@@ -82,6 +82,7 @@ begin
   ButtonCancel.Width:= ButtonCancel.Height;
   list.UpdateItemHeight;
   Height := List.BorderSpacing.Around * 2 + Min(list.VirtualItemCount, 10) * List.ItemHeight;
+  Top := Top + 6;
 end;
 
 procedure TfmMenuList.ListDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
@@ -157,7 +158,7 @@ begin
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
   List.OnChangedSel:= @DoListChangedSel;
-  List.ItemHeight := ATEditorScale(list.Font.Size+list.Font.Size+2);
+  List.ItemHeight := ATEditorScale(list.Font.Size+list.Font.Size + 6);
 
   Items:= nil;
   ResultIndex:= -1;
