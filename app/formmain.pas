@@ -1017,7 +1017,7 @@ type
     function DoDialogCommands_Py(var AProps: TDlgCommandsProps): string;
     procedure DoDialogGoto;
     function DoDialogMenuList(const ACaption: string; AItems: TStringList; AInitItemIndex: integer;
-      ACloseOnCtrlRelease: boolean= false; AOnListSelect: TAppListSelectEvent=nil): integer;
+      ACloseOnCtrlRelease: boolean= false): integer;
     procedure DoDialogMenuTabSwitcher;
     function DoDialogMenuLexerChoose(const AFilename: string; ANames: TStringList): integer;
     procedure DoDialogGotoBookmark;
@@ -5073,27 +5073,22 @@ end;
 
 function TfmMain.DoDialogMenuList(const ACaption: string; AItems: TStringList;
   AInitItemIndex: integer;
-  ACloseOnCtrlRelease: boolean=false;
-  AOnListSelect: TAppListSelectEvent=nil): integer;
+  ACloseOnCtrlRelease: boolean=false): integer;
 var
-  Form: TfmMenuList;
+  DlgProps: TDlgMenuProps;
 begin
   Result:= -1;
   if AItems.Count=0 then exit;
-  Form:= TfmMenuList.Create(nil);
-  try
-    UpdateInputForm(Form);
-    Form.Caption:= ACaption;
-    Form.Items:= AItems;
-    Form.CloseOnCtrlRelease:= ACloseOnCtrlRelease;
-    Form.InitialItemIndex:= AInitItemIndex;
-    Form.OnListSelect:= AOnListSelect;
-    Form.ShowModal;
-    Application.ProcessMessages;
-    Result:= Form.ResultIndex;
-  finally
-    FreeAndNil(Form);
-  end;
+
+  DlgProps:= Default(TDlgMenuProps);
+  DlgProps.Caption:= ACaption;
+  DlgProps.Collapse:= acsmRight;
+  DlgProps.InitialIndex:= AInitItemIndex;
+  DlgProps.ItemsText:= AItems.Text;
+  DlgProps.NoFuzzy:= not UiOps.ListboxFuzzySearch;
+
+  Result := DoDialogMenuApi(DlgProps);
+
 end;
 
 function TfmMain.DoDialogMenuLexerChoose(const AFilename: string; ANames: TStringList): integer;
@@ -7178,7 +7173,6 @@ var
   List: TStringList;
   NRes, NSelected: integer;
   Ed: TATSynEdit;
-  DlgProps: TDlgMenuProps;
 begin
   Ed:= CurrentEditor;
   if Ed=nil then exit;
@@ -7196,15 +7190,7 @@ begin
       else NSelected:= 0;
     end;
 
-    DlgProps:= Default(TDlgMenuProps);
-    DlgProps.Caption:= msgStatusbarHintEnds;
-    DlgProps.TextHint:= 'Select ' + msgStatusbarHintEnds;
-    DlgProps.Collapse:= acsmRight;
-    DlgProps.InitialIndex:= NSelected;
-    DlgProps.ItemsText:= List.Text;
-
-    NRes:= DoDialogMenuApi(DlgProps);
-    //NRes:= DoDialogMenuList(msgStatusbarHintEnds, List, NSelected);
+    NRes:= DoDialogMenuList('Select ' + msgStatusbarHintEnds, List, NSelected);
     if NRes>=0 then
       case NRes of
         0: Ed.DoCommand(cmd_LineEndUnix, cInvokeAppPalette);
@@ -7221,8 +7207,7 @@ var
   List: TStringList;
   NRes, NSelected, i: integer;
   Ed: TATSynEdit;
-  SEncName: string;
-  DlgProps: TDlgMenuProps;
+  SEncName, title: string;
 begin
   Ed:= CurrentEditor;
   if Ed=nil then exit;
@@ -7239,17 +7224,12 @@ begin
         NSelected:= i;
     end;
 
-    DlgProps:= Default(TDlgMenuProps);
-    DlgProps.Caption:= msgStatusbarHintEnc;
     if AReloadFile then
-      DlgProps.TextHint:= msgEncReloadAs
+      title:= msgEncReloadAs
     else
-      DlgProps.TextHint:= msgEncConvertTo;
-    DlgProps.Collapse:= acsmRight;
-    DlgProps.InitialIndex:= NSelected;
-    DlgProps.ItemsText:= List.Text;
+      title:= msgEncConvertTo;
 
-    NRes:= DoDialogMenuApi(DlgProps);
+    NRes := DoDialogMenuList(title,List, NSelected);
     if NRes >= 0 then
       SetFrameEncoding(Ed, AppEncodings[NRes].Name, AReloadFile);
   finally
@@ -8679,7 +8659,6 @@ var
   Obj: TObject;
   Frame: TEditorFrame;
   SCaption: string;
-  DlgProps: TDlgMenuProps;
 begin
   Frame:= CurrentFrame;
   if Frame=nil then exit;
@@ -8712,25 +8691,19 @@ begin
     List.Sort;
     List.Insert(0, msgNoLexer);
 
-    DlgProps:= Default(TDlgMenuProps);
-    DlgProps.ItemsText:= List.Text;
-    DlgProps.TextHint:= msgDialogLexerSelect;
-    DlgProps.InitialIndex:= List.IndexOf(Frame.LexerName[Frame.Editor]);
-    DlgProps.Caption:= SCaption;
-    DlgProps.NoFuzzy:= not UiOps.ListboxFuzzySearch;
-
-    NIndex:= DoDialogMenuApi(DlgProps);
-    if NIndex<0 then exit;
-
-    Obj:= List.Objects[NIndex];
-    if Obj=nil then
-      Frame.Lexer[Frame.Editor]:= nil
-    else
-    if Obj is TecSyntAnalyzer then
-      Frame.Lexer[Frame.Editor]:= Obj as TecSyntAnalyzer
-    else
-    if Obj is TATLiteLexer then
-      Frame.LexerLite[Frame.Editor]:= Obj as TATLiteLexer;
+    NIndex:= DoDialogMenuList(msgDialogLexerSelect,
+             List,List.IndexOf(Frame.LexerName[Frame.Editor]));
+    if NIndex >= 0 then begin
+      Obj:= List.Objects[NIndex];
+      if Obj=nil then
+        Frame.Lexer[Frame.Editor]:= nil
+      else
+      if Obj is TecSyntAnalyzer then
+        Frame.Lexer[Frame.Editor]:= Obj as TecSyntAnalyzer
+      else
+      if Obj is TATLiteLexer then
+        Frame.LexerLite[Frame.Editor]:= Obj as TATLiteLexer;
+    end;
   finally
     FreeAndNil(List);
   end;
