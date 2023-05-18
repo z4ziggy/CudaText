@@ -552,11 +552,11 @@ object fmMain: TfmMain
       end
       object mnuFontSub: TMenuItem
         Caption = '&Fonts'
-        object mnuFontText: TMenuItem
-          Caption = 'Select &text font...'
-        end
         object mnuFontUi: TMenuItem
           Caption = 'Select &UI font...'
+        end
+        object mnuFontText: TMenuItem
+          Caption = 'Select &document font...'
         end
         object mnuFontOutput: TMenuItem
           Caption = 'Select &output-panel font...'
