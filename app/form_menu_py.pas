@@ -150,7 +150,6 @@ begin
   list.Color:= FColorBg;
 
   edit.Keymap:= AppKeymapMain;
-  edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
@@ -159,7 +158,13 @@ begin
   edit.Colors.TextSelFont:= GetAppColor(apclEdSelFont);
   edit.Colors.TextSelBG:= GetAppColor(apclEdSelBg);
   edit.Colors.BorderLine:= GetAppColor(apclEdBorder);
+  edit.OptBorderWidth:= edit.Font.Size + 2;
+  edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
+  //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
+  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
+  list.Font.Quality:= EditorOps.OpFontQuality;
   list.ItemHeight:= edit.Height;
 
   edit.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
@@ -394,7 +399,7 @@ begin
     bCurrentFuzzy:= false;
 
   pnt.x:= CRect.Left+IndentFor1stLine;
-  pnt.y:= CRect.Top+edit.OptBorderWidth;
+  pnt.y:= CRect.Top+edit.OptBorderWidth div 2 -3;
   c.TextOut(pnt.x, pnt.y, s_name2);
 
   c.Font.Color:= FColorFontHilite;

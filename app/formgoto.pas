@@ -94,10 +94,12 @@ end;
 
 procedure TfmGoto.FormShow(Sender: TObject);
 begin
-  edInput.Height:= ATEditorScale(UiOps.InputHeight+edInput.OptBorderWidth);
   edInput.Font.Name:= EditorOps.OpFontName;
   edInput.Font.Size:= EditorOps.OpFontSize;
   edInput.Font.Quality:= EditorOps.OpFontQuality;
+  edInput.OptBorderWidth:= edInput.Font.Size + 2 ;
+  edInput.Height:= ATEditorScale(edInput.Font.Size+edInput.OptBorderWidth);
+  //edInput.Height:= ATEditorScale(UiOps.InputHeight+edInput.OptBorderWidth);
 
   edInput.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
   edInput.OptCaretBlinkTime:= EditorOps.OpCaretBlinkTime;

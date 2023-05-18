@@ -127,18 +127,20 @@ var
 begin
   Localize;
 
-  list.Font.Name:= EditorOps.OpFontName;
-  list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
-  list.Font.Quality:= EditorOps.OpFontQuality;
-  list.ItemHeight:=edit.Height+edit.OptBorderWidth;
-
-  edit.Height:= ATEditorScale(UiOps.InputHeight) + edit.OptBorderWidth;
   edit.Font.Name:= EditorOps.OpFontName;
   edit.Font.Size:= EditorOps.OpFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
+  edit.OptBorderWidth:= edit.Font.Size + 2;
+  edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
+  //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
   edit.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
   edit.OptCaretBlinkTime:= EditorOps.OpCaretBlinkTime;
+
+  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
+  list.Font.Quality:= EditorOps.OpFontQuality;
+  list.ItemHeight:=edit.Height;//+edit.OptBorderWidth;
 
   EditorCaretShapeFromString(edit.CaretShapeNormal, EditorOps.OpCaretViewNormal);
   EditorCaretShapeFromString(edit.CaretShapeOverwrite, EditorOps.OpCaretViewOverwrite);
@@ -479,7 +481,7 @@ begin
   _GetPrefix(strfind, 'r');
 
   c.Font.Size := list.Font.Size;
-  pnt:= Point(CRect.Left+4, CRect.Top+edit.OptBorderWidth);
+  pnt:= Point(CRect.Left+4, CRect.Top+edit.OptBorderWidth div 2 -3);
   c.TextOut(pnt.x, pnt.y, strname);
 
   c.Font.Color:= FColorFontHilite;
@@ -553,7 +555,7 @@ begin
     c.Font.Color:= FColorFontHotkey;
     c.TextOut(
       n,
-      pnt.y + (list.ItemHeight-TextSize.cy) div 2 - 3,
+      pnt.y + (list.ItemHeight-TextSize.cy) div 2,
       strkey);
     c.Font.Size:= nPrevSize;
     c.Font.Bold:= false;
