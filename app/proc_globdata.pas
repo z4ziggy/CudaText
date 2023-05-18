@@ -1345,7 +1345,7 @@ begin
   if not DirectoryExists(Dir) and DirectoryExists('/usr/lib') then
     Dir:= '/usr/lib';
 
-  if FindFirst(Dir+'/'+'libpython3.*.so.*', faAnyFile, FileInfo)=0 then
+  if FindFirst(Dir+'/'+'libpython3.*.so', faAnyFile, FileInfo)=0 then
   begin
     Result:= Dir+'/'+FileInfo.Name;
     FindClose(FileInfo);
@@ -1354,7 +1354,7 @@ begin
 
   Dir:= Dir+'/x86_64-linux-gnu';
   if DirectoryExists(Dir) and
-    (FindFirst(Dir+'/'+'libpython3.*.so.*', faAnyFile, FileInfo)=0) then
+    (FindFirst(Dir+'/'+'libpython3.*.so', faAnyFile, FileInfo)=0) then
   begin
     Result:= Dir+'/'+FileInfo.Name;
     FindClose(FileInfo);
