@@ -1342,9 +1342,14 @@ begin
 
   {$ifdef unix}
   Dir:= '/usr/lib64';
-  if not DirectoryExists(Dir) and DirectoryExists('/usr/lib') then
-    Dir:= '/usr/lib';
+  if FindFirst(Dir+'/'+'libpython3.*.so', faAnyFile, FileInfo)=0 then
+  begin
+    Result:= Dir+'/'+FileInfo.Name;
+    FindClose(FileInfo);
+    exit;
+  end;
 
+  Dir:= '/usr/lib';
   if FindFirst(Dir+'/'+'libpython3.*.so', faAnyFile, FileInfo)=0 then
   begin
     Result:= Dir+'/'+FileInfo.Name;
