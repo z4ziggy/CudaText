@@ -1173,7 +1173,11 @@ const
     {$ifdef haiku}
     12;
     {$else}
-    9;
+      {$ifdef linux}
+      12;
+      {$else}
+      9;
+      {$endif}
     {$endif}
 
 
@@ -1914,7 +1918,7 @@ begin
   with Op do
   begin
     VarFontName:= 'default';
-    VarFontSize:= 9;
+    VarFontSize:= {$ifdef linux}12{$else}9{$endif};
 
     OutputFontName:= VarFontName;
     OutputFontSize:= VarFontSize;
