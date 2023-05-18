@@ -331,9 +331,9 @@ const
   msgConfirmReloadItHotkeysSess: string = '(Yes: reopen. No: open text from previous session.)';
   msgConfirmOpenCreatedDoc: string = 'Open created document?';
   msgConfirmSaveColorsToFile: string = 'Save theme to file?';
-  msgConfirmSaveModifiedTab: string = 'Tab is modified:'#10'%s'#10#10'Save it first?';
+  msgConfirmSaveModifiedTab: string = 'Save changes to document "%s" before closing?'#10#10'If you don''t save, changes will be permanently lost.';
   msgConfirmClosePinnedTab: string = 'Tab is pinned:'#10'%s'#10#10'Are you sure you want to close it?';
-  msgConfirmReopenModifiedTab: string = 'Tab is modified:'#10'%s'#10#10'Reopen it?';
+  msgConfirmReopenModifiedTab: string = 'Document was modified:'#10'%s'#10#10'Reopen it?';
   msgConfirmReloadFileWithEnc: string = 'Encoding is changed in memory.'#10'Do you also want to reopen file?';
   msgConfirmCreateNewFile: string = 'File not found:'#10'"%s"'#10#10'Create it?';
   msgConfirmCreateUserConfig: string = 'User config not found. Create it?';
