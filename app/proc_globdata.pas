@@ -1918,7 +1918,7 @@ begin
   with Op do
   begin
     VarFontName:= 'default';
-    VarFontSize:= {$ifdef linux}12{$else}9{$endif};
+    VarFontSize:= {$ifdef linux}13{$else}9{$endif};
 
     OutputFontName:= VarFontName;
     OutputFontSize:= VarFontSize;
