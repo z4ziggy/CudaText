@@ -153,7 +153,7 @@ begin
   Width := ATEditorScale(UiOps.ListboxSizeX);
   //self.Height:= ATEditorScale(UiOps.ListboxSizeY);
 
-  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Name:= UiOps.VarFontName;
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
   List.OnChangedSel:= @DoListChangedSel;

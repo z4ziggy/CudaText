@@ -150,8 +150,8 @@ begin
   list.Color:= FColorBg;
 
   edit.Keymap:= AppKeymapMain;
-  edit.Font.Name:= EditorOps.OpFontName;
-  edit.Font.Size:= EditorOps.OpFontSize;
+  edit.Font.Name:= UiOps.VarFontName;
+  edit.Font.Size:= UiOps.VarFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
   edit.Colors.TextFont:= GetAppColor(apclEdTextFont);
   edit.Colors.TextBG:= GetAppColor(apclEdTextBg);
@@ -162,7 +162,7 @@ begin
   edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
   //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
-  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Name:= UiOps.VarFontName;
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
   list.ItemHeight:= edit.Height;

@@ -94,8 +94,8 @@ end;
 
 procedure TfmGoto.FormShow(Sender: TObject);
 begin
-  edInput.Font.Name:= EditorOps.OpFontName;
-  edInput.Font.Size:= EditorOps.OpFontSize;
+  edInput.Font.Name:= UiOps.VarFontName;
+  edInput.Font.Size:= UiOps.VarFontSize;
   edInput.Font.Quality:= EditorOps.OpFontQuality;
   edInput.OptBorderWidth:= edInput.Font.Size + 6 ;
   edInput.Height:= ATEditorScale(edInput.Font.Size+edInput.OptBorderWidth);

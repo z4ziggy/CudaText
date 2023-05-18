@@ -1812,6 +1812,7 @@ begin
     'font_name'+cOptionSystemSuffix,
     'font_size'+cOptionSystemSuffix);
   DoApplyFont_Text;
+  DoApplyUiOps;
 end;
 
 procedure TfmMain.DoOps_DialogFont_Ui;
@@ -1822,6 +1823,7 @@ begin
     OpStr_UiFontName,
     OpStr_UiFontSize);
   DoApplyFont_Ui;
+  DoApplyUiOps;
 end;
 
 procedure TfmMain.DoOps_DialogFont_Output;
@@ -1832,6 +1834,7 @@ begin
     OpStr_UiFontOutputName,
     OpStr_UiFontOutputSize);
   DoApplyFont_Output;
+  DoApplyUiOps;
 end;
 
 procedure TfmMain.DoOps_FontSizeChange(AIncrement: integer);

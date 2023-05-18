@@ -127,8 +127,8 @@ var
 begin
   Localize;
 
-  edit.Font.Name:= EditorOps.OpFontName;
-  edit.Font.Size:= EditorOps.OpFontSize;
+  edit.Font.Name:= UiOps.VarFontName;
+  edit.Font.Size:= UiOps.VarFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
   edit.OptBorderWidth:= edit.Font.Size + 6;
   edit.Height:= ATEditorScale(edit.Font.Size+edit.OptBorderWidth);
@@ -137,7 +137,7 @@ begin
   edit.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
   edit.OptCaretBlinkTime:= EditorOps.OpCaretBlinkTime;
 
-  list.Font.Name:= EditorOps.OpFontName;
+  list.Font.Name:= UiOps.VarFontName;
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
   list.ItemHeight:=edit.Height;
