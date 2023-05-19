@@ -645,6 +645,7 @@ type
     OpShowFullBackgroundSel: boolean;
     OpShowFullBackgroundSyntax: boolean;
     OpShowMouseSelFrame: boolean;
+    OpShowIndentLines: boolean;
     OpCopyLineIfNoSel: boolean;
     OpCutLineIfNoSel: boolean;
     OpCopyColumnAlignedBySpaces: boolean;
@@ -1820,6 +1821,7 @@ begin
     OpShowFullBackgroundSel:= false;
     OpShowFullBackgroundSyntax:= true;
     OpShowMouseSelFrame:= true;
+    OpShowIndentLines:= true;
     OpCopyLineIfNoSel:= true;
     OpCutLineIfNoSel:= false;
     OpCopyColumnAlignedBySpaces:= true;
