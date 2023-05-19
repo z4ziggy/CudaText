@@ -157,7 +157,7 @@ begin
   list.Font.Size:= ATEditorScaleFont(UiOps.VarFontSize);
   list.Font.Quality:= EditorOps.OpFontQuality;
   List.OnChangedSel:= @DoListChangedSel;
-  List.ItemHeight := ATEditorScale(list.Font.Size+list.Font.Size + 6);
+  List.ItemHeight := ATEditorScale(list.Font.Size*3);
 
   Items:= nil;
   ResultIndex:= -1;

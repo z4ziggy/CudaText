@@ -105,7 +105,7 @@ const
   msgTooltipArrowRight: string = 'Scroll tabs right';
   msgTooltipArrowMenu: string = 'Show tabs menu';
 
-  msgDialogLexerSelect = 'Apply a lexer';
+  msgDialogLexerSelect = 'Select a lexer for current document';
   msgUntitledEnglish = 'Untitled';
   msgUntitledTab: string = msgUntitledEnglish;
   msgAllFiles: string = 'All files';
