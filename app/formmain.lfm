@@ -10,7 +10,6 @@ object fmMain: TfmMain
   Constraints.MinHeight = 200
   Constraints.MinWidth = 300
   DefaultMonitor = dmDesktop
-  FormStyle = fsStayOnTop
   KeyPreview = True
   Menu = MainMenu
   OnActivate = FormActivate
@@ -217,18 +216,6 @@ object fmMain: TfmMain
       object mnuEditCopy: TMenuItem
         Caption = '&Copy'
       end
-      object mnuEditPaste: TMenuItem
-        Caption = '&Paste'
-      end
-      object mnuEditPasteIndent: TMenuItem
-        Caption = 'Paste and indent'
-      end
-      object mnuEditPasteHist: TMenuItem
-        Caption = 'Paste from history'
-      end
-      object SepEd2: TMenuItem
-        Caption = '-'
-      end
       object mnuEditCopySub: TMenuItem
         Caption = 'Cop&y to clipboard'
         object mnuEditCopyLine: TMenuItem
@@ -248,6 +235,39 @@ object fmMain: TfmMain
         end
         object mnuEditCopyFName: TMenuItem
           Caption = 'Copy file&name only'
+        end
+      end
+      object mnuEditPaste: TMenuItem
+        Caption = '&Paste'
+      end
+      object mnuEditPasteIndent: TMenuItem
+        Caption = 'Paste and indent'
+      end
+      object mnuEditPasteHist: TMenuItem
+        Caption = 'Paste from history'
+      end
+      object SepEd2: TMenuItem
+        Caption = '-'
+      end
+      object mnuSel: TMenuItem
+        Caption = 'Select&ion'
+        object mnuSelAll: TMenuItem
+          Caption = '&Select all'
+        end
+        object mnuSelExtLine: TMenuItem
+          Caption = '&Expand selection to line'
+        end
+        object mnuSelExtWord: TMenuItem
+          Caption = 'Add next occurrence of selected &word'
+        end
+        object MenuItem5: TMenuItem
+          Caption = '-'
+        end
+        object mnuSelSplit: TMenuItem
+          Caption = 'S&plit selection into lines'
+        end
+        object mnuSelInvert: TMenuItem
+          Caption = '&Invert selection'
         end
       end
       object mnuEditLineOp: TMenuItem
@@ -316,31 +336,7 @@ object fmMain: TfmMain
           Caption = '&Sentence case'
         end
       end
-      object mnuEditCharmap: TMenuItem
-        Caption = 'Char m&ap...'
-      end
-    end
-    object mnuSel: TMenuItem
-      Caption = 'Select&ion'
-      object mnuSelAll: TMenuItem
-        Caption = '&Select all'
-      end
-      object mnuSelExtLine: TMenuItem
-        Caption = '&Expand selection to line'
-      end
-      object mnuSelExtWord: TMenuItem
-        Caption = 'Add next occurrence of selected &word'
-      end
-      object MenuItem5: TMenuItem
-        Caption = '-'
-      end
-      object mnuSelSplit: TMenuItem
-        Caption = 'S&plit selection into lines'
-      end
-      object mnuSelInvert: TMenuItem
-        Caption = '&Invert selection'
-      end
-      object SepSel1: TMenuItem
+      object Separator2: TMenuItem
         Caption = '-'
       end
       object mnuCaretsCancel: TMenuItem
@@ -369,6 +365,12 @@ object fmMain: TfmMain
         object mnuCaretsDownEnd: TMenuItem
           Caption = 'More carets, down, until &end'
         end
+      end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object mnuEditCharmap: TMenuItem
+        Caption = 'Char m&ap...'
       end
     end
     object mnuSr: TMenuItem

@@ -263,6 +263,8 @@ type
     mnuViewFloatBottom: TMenuItem;
     mnuOpDefaultUser: TMenuItem;
     Separator1: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
     TimerMouseStop: TTimer;
     TimerStatusWork: TTimer;
     TimerAppIdle: TIdleTimer;
@@ -372,7 +374,6 @@ type
     mnuSelExtLine: TMenuItem;
     mnuSelInvert: TMenuItem;
     mnuSelSplit: TMenuItem;
-    SepSel1: TMenuItem;
     mnuSel: TMenuItem;
     mnuFileSaveAll: TMenuItem;
     mnuEditCopyLine: TMenuItem;
