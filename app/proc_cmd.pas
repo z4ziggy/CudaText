@@ -484,7 +484,7 @@ begin
   M.Add(cmd_ToggleDistractionFree, 'ui: toggle distraction-free mode', [{$ifndef darwin}scAlt+VK_F11{$else}scCtrl+scMeta+VK_G{$endif}], []);
   M.Add(cmd_ToggleSidePanel, 'ui: toggle side panel', [{$ifndef darwin}VK_F12{$endif}], []);
   M.Add(cmd_ToggleSidePanelAndSyntaxTree, 'ui: toggle side panel / code tree', [], []);
-  M.Add(cmd_ToggleBottomPanel, 'ui: toggle bottom panel', [], []);
+  M.Add(cmd_ToggleBottomPanel, 'ui: toggle bottom panel', [{$ifndef darwin}VK_F10{$endif}], []);
   M.Add(cmd_ToggleSidebar, 'ui: toggle sidebar', [], []);
   M.Add(cmd_ToggleToolbar, 'ui: toggle toolbar', [], []);
   M.Add(cmd_ToggleStatusbar, 'ui: toggle statusbar', [], []);
