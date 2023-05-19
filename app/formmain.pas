@@ -3987,8 +3987,10 @@ begin
             if Form.List.Checked[i] then
             begin
               F:= Form.List.Items.Objects[i] as TEditorFrame;
-              if not F.DoFileSave(false, true) then
-                exit(false);
+              if not F.DoFileSave(false, true) then begin
+                Result:= false;
+                break;
+              end;
             end;
         end;
     end;
@@ -4837,7 +4839,10 @@ begin
     dlg.FileName:= '';
 
     DoFileDialog_PrepareDir(dlg);
-    if not dlg.Execute then exit;
+    if not dlg.Execute then begin
+      FreeAndNil(dlg);
+      exit;
+    end;
     DoFileDialog_SaveDir(dlg);
 
     NFileCount:= dlg.Files.Count;
@@ -5270,6 +5275,7 @@ begin
     if ListItems.Count=0 then
     begin
       MsgStatus(msgCannotFindBookmarks);
+      FreeAndNil(ListItems);
       Exit;
     end;
 
@@ -5295,20 +5301,20 @@ begin
     if SelIndex<0 then
     begin
       MsgStatus(msgStatusCancelled);
-      Exit
+    end
+    else begin
+      Prop:= TAppBookmarkProp(ListItems.Objects[SelIndex]);
+      SetFrame(Prop.Frame);
+      Prop.Frame.SetFocus;
+      Prop.Ed.DoGotoPos(
+        Point(0, Prop.LineIndex),
+        Point(-1, -1),
+        UiOps.FindIndentHorz,
+        UiOps.FindIndentVert,
+        true,
+        true
+        );
     end;
-
-    Prop:= TAppBookmarkProp(ListItems.Objects[SelIndex]);
-    SetFrame(Prop.Frame);
-    Prop.Frame.SetFocus;
-    Prop.Ed.DoGotoPos(
-      Point(0, Prop.LineIndex),
-      Point(-1, -1),
-      UiOps.FindIndentHorz,
-      UiOps.FindIndentVert,
-      true,
-      true
-      );
   finally
     FreeAndNil(ListItems);
   end;
@@ -6033,13 +6039,18 @@ begin
           ID_YES:
             begin
               //Cancel in "Save as" dlg must be global cancel
-              if not F.DoFileSave(false, true) then
+              if not F.DoFileSave(false, true) then begin
+                FreeAndNil(ListNoSave);
                 exit(false);
+              end;
             end;
           ID_NO:
             ListNoSave.Add(F);
           ID_CANCEL:
-            exit(false);
+            begin
+              FreeAndNil(ListNoSave);
+              exit(false);
+            end;
         end;
     end;
 
@@ -7027,7 +7038,10 @@ begin
     Dlg.InitialDir:= GetTempDir(false);
     Dlg.Options:= [ofPathMustExist, ofEnableSizing, ofDontAddToRecent];
     Dlg.Filter:= 'HTML files|*.htm;*.html';
-    if not Dlg.Execute then exit;
+    if not Dlg.Execute then begin
+      FreeAndNil(Dlg);
+      exit;
+    end;
     SFileName:= Dlg.FileName;
   finally
     FreeAndNil(Dlg);
@@ -7130,39 +7144,39 @@ begin
   ListNames:= TStringList.Create;
   try
     FindAllFiles(ListFiles, AppDir_DataLang, '*.ini', false);
-    if ListFiles.Count=0 then exit;
-    ListFiles.Sort;
+    if ListFiles.Count>0 then begin
+      ListFiles.Sort;
 
-    ListNames.Add(cEnLang);
-    for i:= 0 to ListFiles.Count-1 do
-    begin
-      S:= ExtractFileNameOnly(ListFiles[i]);
-      if S='translation template' then Continue;
-      ListNames.Add(S);
+      ListNames.Add(cEnLang);
+      for i:= 0 to ListFiles.Count-1 do
+      begin
+        S:= ExtractFileNameOnly(ListFiles[i]);
+        if S='translation template' then Continue;
+        ListNames.Add(S);
+      end;
+
+      NItemIndex:= ListNames.IndexOf(UiOps.LangName);
+      if NItemIndex<0 then
+        NItemIndex:= 0;
+
+      NResult:= DoDialogMenuList(msgMenuTranslations, ListNames, NItemIndex);
+      if NResult>=0 then begin
+        if ListNames[NResult]=cEnLang then
+        begin
+          UiOps.LangName:= '';
+          MsgBox(msgStatusI18nEnglishAfterRestart, MB_OK or MB_ICONINFORMATION);
+        end
+        else
+        begin
+          UiOps.LangName:= ListNames[NResult];
+          DoLocalize;
+
+          if DirectoryExists(AppDir_Data+DirectorySeparator+'langmenu') then
+            MsgBox(msgStatusI18nPluginsMenuAfterRestart, MB_OK or MB_ICONINFORMATION);
+        end;
+        DoPyEvent_AppState(APPSTATE_LANG);
+      end;
     end;
-
-    NItemIndex:= ListNames.IndexOf(UiOps.LangName);
-    if NItemIndex<0 then
-      NItemIndex:= 0;
-
-    NResult:= DoDialogMenuList(msgMenuTranslations, ListNames, NItemIndex);
-    if NResult<0 then exit;
-
-    if ListNames[NResult]=cEnLang then
-    begin
-      UiOps.LangName:= '';
-      MsgBox(msgStatusI18nEnglishAfterRestart, MB_OK or MB_ICONINFORMATION);
-    end
-    else
-    begin
-      UiOps.LangName:= ListNames[NResult];
-      DoLocalize;
-
-      if DirectoryExists(AppDir_Data+DirectorySeparator+'langmenu') then
-        MsgBox(msgStatusI18nPluginsMenuAfterRestart, MB_OK or MB_ICONINFORMATION);
-    end;
-
-    DoPyEvent_AppState(APPSTATE_LANG);
   finally
     FreeAndNil(ListNames);
     FreeAndNil(ListFiles);
@@ -8452,44 +8466,43 @@ begin
     with AppPython.Engine do
     begin
       NCount:= PyList_Size(Data);
-      if NCount<=0 then exit;
-
-      for iItem:= 0 to NCount-1 do
-      begin
-        DataItem:= PyList_GetItem(Data, iItem);
-        DataPos:= PyTuple_GetItem(DataItem, 0);
-        DataLevel:= PyTuple_GetItem(DataItem, 1);
-        DataTitle:= PyTuple_GetItem(DataItem, 2);
-        DataIcon:= PyTuple_GetItem(DataItem, 3);
-
-        NX1:= PyLong_AsLong(PyTuple_GetItem(DataPos, 0));
-        NY1:= PyLong_AsLong(PyTuple_GetItem(DataPos, 1));
-        NX2:= PyLong_AsLong(PyTuple_GetItem(DataPos, 2));
-        NY2:= PyLong_AsLong(PyTuple_GetItem(DataPos, 3));
-        NLevel:= PyLong_AsLong(DataLevel);
-        STitle:= PyUnicodeAsUTF8String(DataTitle);
-        NIcon:= PyLong_AsLong(DataIcon);
-
-        if (Node=nil) or (NLevel<=1) then
-          NodeParent:= nil
-        else
+      if NCount>0 then
+        for iItem:= 0 to NCount-1 do
         begin
-          NodeParent:= Node;
-          for iLevel:= NLevel to NLevelPrev do
-            if Assigned(NodeParent) then
-              NodeParent:= NodeParent.Parent;
+          DataItem:= PyList_GetItem(Data, iItem);
+          DataPos:= PyTuple_GetItem(DataItem, 0);
+          DataLevel:= PyTuple_GetItem(DataItem, 1);
+          DataTitle:= PyTuple_GetItem(DataItem, 2);
+          DataIcon:= PyTuple_GetItem(DataItem, 3);
+
+          NX1:= PyLong_AsLong(PyTuple_GetItem(DataPos, 0));
+          NY1:= PyLong_AsLong(PyTuple_GetItem(DataPos, 1));
+          NX2:= PyLong_AsLong(PyTuple_GetItem(DataPos, 2));
+          NY2:= PyLong_AsLong(PyTuple_GetItem(DataPos, 3));
+          NLevel:= PyLong_AsLong(DataLevel);
+          STitle:= PyUnicodeAsUTF8String(DataTitle);
+          NIcon:= PyLong_AsLong(DataIcon);
+
+          if (Node=nil) or (NLevel<=1) then
+            NodeParent:= nil
+          else
+          begin
+            NodeParent:= Node;
+            for iLevel:= NLevel to NLevelPrev do
+              if Assigned(NodeParent) then
+                NodeParent:= NodeParent.Parent;
+          end;
+
+          Range:= TATRangeInCodeTree.Create;
+          Range.PosBegin:= Point(NX1, NY1);
+          Range.PosEnd:= Point(NX2, NY2);
+
+          Node:= Tree.Items.AddChildObject(NodeParent, STitle, Range);
+          Node.ImageIndex:= NIcon;
+          Node.SelectedIndex:= NIcon;
+
+          NLevelPrev:= NLevel;
         end;
-
-        Range:= TATRangeInCodeTree.Create;
-        Range.PosBegin:= Point(NX1, NY1);
-        Range.PosEnd:= Point(NX2, NY2);
-
-        Node:= Tree.Items.AddChildObject(NodeParent, STitle, Range);
-        Node.ImageIndex:= NIcon;
-        Node.SelectedIndex:= NIcon;
-
-        NLevelPrev:= NLevel;
-      end;
     end;
   finally
    Tree.EndUpdate;
@@ -8631,20 +8644,21 @@ begin
       end;
     end;
 
-    if FrameList.Count<=1 then exit;
-    FrameList.CustomSort(@_FrameListCompare);
+    if FrameList.Count>1 then begin
+      FrameList.CustomSort(@_FrameListCompare);
 
-    iTab:= DoDialogMenuList(
-      msgPanelTabs,
-      FrameList,
-      Min(1 {initially select 2nd item}, FrameList.Count-1),
-      true
-      );
-    if iTab<0 then exit;
-
-    F:= FrameList.Objects[iTab] as TEditorFrame;
-    SetFrame(F);
-    F.SetFocus;
+      iTab:= DoDialogMenuList(
+        msgPanelTabs,
+        FrameList,
+        Min(1 {initially select 2nd item}, FrameList.Count-1),
+        true
+        );
+      if iTab>=0 then begin
+        F:= FrameList.Objects[iTab] as TEditorFrame;
+        SetFrame(F);
+        F.SetFocus;
+      end;
+    end;
   finally
     FreeAndNil(FrameList);
   end;
@@ -8877,15 +8891,16 @@ begin
     if L.Count=0 then
     begin
       MsgStatus(msgCannotFindPython);
-      exit
+    end
+    else begin
+      N:= DoDialogMenuList(msgPythonFindCaption, L, 0);
+      if N>=0 then begin
+        S:= L[N];
+
+        DoOps_SaveOptionString('pylib'+cOptionSystemSuffix, S);
+        MsgBox(msgSavedPythonLibOption, MB_OK+MB_ICONINFORMATION);
+      end;
     end;
-
-    N:= DoDialogMenuList(msgPythonFindCaption, L, 0);
-    if N<0 then exit;
-    S:= L[N];
-
-    DoOps_SaveOptionString('pylib'+cOptionSystemSuffix, S);
-    MsgBox(msgSavedPythonLibOption, MB_OK+MB_ICONINFORMATION);
   finally
     FreeAndNil(L);
   end;

@@ -10,6 +10,7 @@ object fmMain: TfmMain
   Constraints.MinHeight = 200
   Constraints.MinWidth = 300
   DefaultMonitor = dmDesktop
+  FormStyle = fsStayOnTop
   KeyPreview = True
   Menu = MainMenu
   OnActivate = FormActivate

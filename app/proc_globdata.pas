@@ -2429,6 +2429,8 @@ begin
       c.Formatted:= true;
       c.Filename:= SFilename;
     except
+      c.Free;
+      sl.Free;
       exit;
     end;
 
@@ -2473,6 +2475,7 @@ begin
       c.Formatted:= true;
       c.Filename:= SFilename;
     except
+      c.Free;
       exit;
     end;
 
@@ -2510,6 +2513,8 @@ begin
       c.Formatted:= true;
       c.Filename:= SFilename;
     except
+      c.Free;
+      sl.Free;
       exit;
     end;
 
@@ -2517,7 +2522,11 @@ begin
 
     //check: this command has already any hotkey?
     if not AOverwriteKey then
-      if c.GetValue(path+'/s1', sl, '') then exit;
+      if c.GetValue(path+'/s1', sl, '') then begin
+        c.Free;
+        sl.Free;
+        exit;
+      end;
 
     c.SetValue(path+'/name', AMenuitemCaption);
 
@@ -2891,6 +2900,9 @@ begin
       cfg.Formatted:= true;
       cfg.Filename:= AFileName;
     except
+      skeys.Free;
+      slist.Free;
+      cfg.Free;
       exit;
     end;
 
@@ -3760,7 +3772,7 @@ begin
   end;
 end;
 
-{
+
 procedure AppFreeListTimers;
 var
   Obj: TObject;
@@ -3777,7 +3789,7 @@ begin
   end;
   FreeAndNil(AppListTimers);
 end;
-}
+
 
 function IsSetToOneInstance: boolean;
 var
@@ -4084,9 +4096,6 @@ finalization
   FreeAndNil(AppBookmarkImagelist);
 
   AppClearPluginLists;
-  //FreeAndNil(AppTreeHelpers);
-  //FreeAndNil(AppEventList);
-  //FreeAndNil(AppCommandList);
   AppConsoleQueue.Push(''); // fix for #5037: Adds dummy data to avoid exception on free
   FreeAndNil(AppConsoleQueue);
   FreeAndNil(AppCommandsDelayed);
@@ -4094,7 +4103,7 @@ finalization
   if Assigned(AppLexersLastDetected) then
     FreeAndNil(AppLexersLastDetected);
 
-  //AppFreeListTimers; //somehow gives crash on exit, if TerminalPlus was used, in timer_proc(TIMER_DELETE...)
+  AppFreeListTimers; //somehow gives crash on exit, if TerminalPlus was used, in timer_proc(TIMER_DELETE...)
 
   {$ifdef unix}
   if Assigned(AppUniqInst) then

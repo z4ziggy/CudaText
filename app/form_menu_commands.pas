@@ -481,7 +481,7 @@ begin
   _GetPrefix(strfind, 'r');
 
   c.Font.Size := list.Font.Size;
-  pnt:= Point(CRect.Left+4, CRect.Top+c.Font.Size div 2);
+  pnt:= Point(CRect.Left+4, CRect.Top+c.Font.Size-4);
   c.TextOut(pnt.x, pnt.y, strname);
 
   c.Font.Color:= FColorFontHilite;
