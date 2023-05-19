@@ -54,7 +54,7 @@ begin
         EdGroup:= Frame.GetTabGroups;
         EdPages:= Frame.GetTabPages;
         if EdGroup=nil then exit;
-      end
+      end;
     end;
 
   case CmdCode of
@@ -78,6 +78,7 @@ begin
           else
             raise Exception.Create('No frames left after "Close tab"');
         end;
+        MenuRecentsPopup(self);
       end;
 
     cmd_FileCloseAll:
@@ -94,6 +95,7 @@ begin
           TGroupsHelper.ForceFrameVisible(Frames[0])
         else
           raise Exception.Create('No frames left after "Close all tabs"');
+        MenuRecentsPopup(self);
       end;
 
     cmd_FileCloseOtherThis:
@@ -104,6 +106,7 @@ begin
           EdGroup.CloseTabs(tabCloseOthersThisPage, false, false);
           AppClosingTabs:= false;
         end;
+        MenuRecentsPopup(self);
       end;
 
     cmd_FileCloseOtherAll:
@@ -114,11 +117,13 @@ begin
           EdGroup.CloseTabs(tabCloseOthersAllPages, false, false);
           AppClosingTabs:= false;
         end;
+        MenuRecentsPopup(self);
       end;
 
     cmd_FileCloseAndDelete:
       begin
         DoFileCloseAndDelete(Ed);
+        MenuRecentsPopup(self);
       end;
 
     cmd_FileNew:

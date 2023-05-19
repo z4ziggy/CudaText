@@ -3686,6 +3686,7 @@ begin
       on E: Exception do
       begin
         MsgBadConfig(AppFile_HistoryFiles, E.Message);
+        cfg.Free;
         exit
       end;
     end;
@@ -3939,6 +3940,7 @@ begin
       on E: Exception do
       begin
         MsgBadConfig(AppFile_HistoryFiles, E.Message);
+        cfg.Free;
         exit
       end;
     end;

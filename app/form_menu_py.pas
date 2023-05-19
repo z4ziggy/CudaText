@@ -159,7 +159,7 @@ begin
   edit.Colors.TextSelBG:= GetAppColor(apclEdSelBg);
   edit.Colors.BorderLine:= GetAppColor(apclEdBorder);
   //edit.OptBorderWidth:= edit.Font.Size + 6;
-  edit.Height:= ATEditorScale(edit.Font.Size*3);
+  edit.Height:= ATEditorScale(edit.Font.Size*2);
   //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
   list.Font.Name:= UiOps.VarFontName;
@@ -398,8 +398,9 @@ begin
   if bCurrentFuzzy and (s_name<>s_name2) then
     bCurrentFuzzy:= false;
 
+  c.Font.size := list.Font.size;
   pnt.x:= CRect.Left+IndentFor1stLine;
-  pnt.y:= CRect.Top+c.Font.Size;
+  pnt.y:= CRect.Top+c.Font.Size div 4;
   c.TextOut(pnt.x, pnt.y, s_name2);
 
   c.Font.Color:= FColorFontHilite;

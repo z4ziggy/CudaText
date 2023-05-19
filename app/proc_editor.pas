@@ -2281,7 +2281,11 @@ begin
       //we found and highlighted all matches,
       //now we need to do 'find next from caret' like Sublime does
       NLineCount:= AFinder.Editor.Strings.Count;
-      if ACaretPos.Y>=NLineCount then exit;
+      if ACaretPos.Y>=NLineCount then begin
+        if bSaveCarets then
+          FreeAndNil(SavedCarets);
+        exit;
+      end;
       AFinder.OptFromCaret:= true;
       AFinder.Editor.DoCaretSingle(ACaretPos.X, ACaretPos.Y);
 

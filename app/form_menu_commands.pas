@@ -131,7 +131,7 @@ begin
   edit.Font.Size:= UiOps.VarFontSize;
   edit.Font.Quality:= EditorOps.OpFontQuality;
   //edit.OptBorderWidth:= edit.Font.Size + 6;
-  edit.Height:= ATEditorScale(edit.Font.Size*3);
+  edit.Height:= ATEditorScale(edit.Font.Size*2);
   //edit.Height:= ATEditorScale(UiOps.InputHeight+edit.OptBorderWidth);
 
   edit.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;
@@ -481,7 +481,7 @@ begin
   _GetPrefix(strfind, 'r');
 
   c.Font.Size := list.Font.Size;
-  pnt:= Point(CRect.Left+4, CRect.Top+c.Font.Size-4);
+  pnt:= Point(CRect.Left+4, CRect.Top+c.Font.Size div 4);
   c.TextOut(pnt.x, pnt.y, strname);
 
   c.Font.Color:= FColorFontHilite;

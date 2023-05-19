@@ -98,7 +98,7 @@ begin
   edInput.Font.Size:= UiOps.VarFontSize;
   edInput.Font.Quality:= EditorOps.OpFontQuality;
   //edInput.OptBorderWidth:= edInput.Font.Size + 6 ;
-  edInput.Height:= ATEditorScale(edInput.Font.Size*3);
+  edInput.Height:= ATEditorScale(edInput.Font.Size*2);
   //edInput.Height:= ATEditorScale(UiOps.InputHeight+edInput.OptBorderWidth);
 
   edInput.OptCaretBlinkEnabled:= EditorOps.OpCaretBlinkEn;

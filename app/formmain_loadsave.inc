@@ -17,6 +17,7 @@ begin
       cfg.Formatted:= true; //needs last at__jsonconf.pp
       cfg.Filename:= AppFile_OptionsUser;
     except
+      cfg.Free;
       exit;
     end;
 
@@ -36,6 +37,7 @@ begin
       cfg.Formatted:= true; //needs last at__jsonconf.pp
       cfg.Filename:= AppFile_OptionsUser;
     except
+      cfg.Free;
       exit;
     end;
 
@@ -56,6 +58,7 @@ begin
       cfg.Formatted:= true;
       cfg.FileName:= AppFile_OptionsUser;
     except
+      cfg.Free;
       exit
     end;
     cfg.SetValue('/ui_theme', UiOps.ThemeUi);
@@ -75,6 +78,7 @@ begin
       cfg.Formatted:= true; //needs last at__jsonconf.pp
       cfg.Filename:= AppFile_History;
     except
+      cfg.Free;
       exit;
     end;
 
@@ -124,6 +128,7 @@ begin
       cfg.Formatted:= true; //needs last at__jsonconf.pp
       cfg.Filename:= AppFile_History;
     except
+      cfg.Free;
       exit;
     end;
 
@@ -277,6 +282,7 @@ begin
       on E: Exception do
       begin
         MsgBadConfig(sSessionFileName, E.Message);
+        cfg.Free;
         exit;
       end;
     end;
@@ -579,6 +585,7 @@ begin
         MsgBadConfig(sSessionFileName, E.Message);
         DoPyEvent_AppState(APPSTATE_SESSION_LOAD_BEGIN);
         DoPyEvent_AppState(APPSTATE_SESSION_LOAD_FAIL);
+        cfg.free;
         exit;
       end;
     end;
@@ -934,6 +941,7 @@ begin
     try
       cfg.Filename:= AppFile_History;
     except
+      cfg.free;
       exit;
     end;
 
@@ -1703,6 +1711,7 @@ begin
       on E: Exception do
       begin
         MsgBadConfig(AFileName, E.Message);
+        cfg.free;
         Exit
       end;
     end;
@@ -1880,7 +1889,10 @@ begin
   try
     dlg.Font.Name:= OpName;
     dlg.Font.Size:= OpSize;
-    if not dlg.Execute then exit;
+    if not dlg.Execute then begin
+      FreeAndNil(dlg);
+      exit;
+    end;
     OpName:= dlg.Font.Name;
     bSizeValid:= dlg.Font.Size>=7; //workaround for issue #3900: Win10 returns font size=0
     if bSizeValid then

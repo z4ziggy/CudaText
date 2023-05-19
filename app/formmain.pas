@@ -2859,6 +2859,7 @@ begin
   mnuFileOpenSub.Parent.OnClick:= @MenuRecentsPopup;
 
   DoOps_OnCreate;
+  MenuRecentsPopup(self);
 
   //option is applied only once at app start
   if not UiOps.ShowMenubar then
@@ -3196,6 +3197,16 @@ begin
   FreeAndNil(FPrevJsonObj);
   if Assigned(FFinder) then
     FreeAndNil(FFinder);
+
+  if Assigned(PopupTabSize) then
+    FreeAndNil(PopupTabSize);
+
+  PythonEng.Py_Finalize;
+  PythonEng.UnloadDll;
+
+  FreeAndNil(PythonModule);
+  FreeAndNil(PythonEng);
+  FreeAndNil(PythonIO);
 end;
 
 procedure TfmMain.FormDropFiles(Sender: TObject;
