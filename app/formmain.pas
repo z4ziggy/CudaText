@@ -2770,6 +2770,7 @@ begin
   begin
     PanelRoot:= Self.PanelAll;
     Toolbar:= ToolbarSideLow;
+    DefaultPanel:= msgPanelConsole_Init;
     OnShow:= @DoBottom_OnShow;
     OnHide:= @DoBottom_OnHide;
     OnCommand:= @DoSidebar_OnPythonCall;
@@ -6247,9 +6248,11 @@ begin
   with AppPanels[cPaneOut] do
   begin
     Visible:= not Visible;
-    if not Visible then
+    if not Visible then begin
       if ActiveControl=nil then
         DoFocusEditor(CurrentEditor);
+    end else
+      UpdatePanels(LastActivePanel, false, true);
   end;
 end;
 
