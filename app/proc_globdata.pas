@@ -3775,24 +3775,6 @@ begin
 end;
 
 
-procedure AppFreeListTimers;
-var
-  Obj: TObject;
-  i: integer;
-begin
-  for i:= AppListTimers.Count-1 downto 0 do
-  begin
-    Obj:= AppListTimers.Objects[i];
-    if Assigned(Obj) then
-    begin
-      TTimer(Obj).Enabled:= false;
-      Obj.Free;
-    end;
-  end;
-  FreeAndNil(AppListTimers);
-end;
-
-
 function IsSetToOneInstance: boolean;
 var
   c: TJSONConfig;
@@ -4105,7 +4087,7 @@ finalization
   if Assigned(AppLexersLastDetected) then
     FreeAndNil(AppLexersLastDetected);
 
-  AppFreeListTimers; //somehow gives crash on exit, if TerminalPlus was used, in timer_proc(TIMER_DELETE...)
+  FreeAndNil(AppListTimers);
 
   {$ifdef unix}
   if Assigned(AppUniqInst) then

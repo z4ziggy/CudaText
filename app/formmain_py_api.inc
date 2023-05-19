@@ -9693,7 +9693,29 @@ var
   Pnt: TPoint;
   Num64: Int64;
   i: integer;
+
+  procedure AppFreeListTimers;
+  var
+  Timer: TTimer;
+  i: integer;
+  begin
+  for i:= AppListTimers.Count-1 downto 0 do
+  begin
+    Timer:= TTimer(AppListTimers.Objects[i]);
+    if Assigned(Timer) then
+    begin
+      try
+        Timer.Enabled:= false;
+        Timer.Free;
+      except
+      end;
+    end;
+    AppListTimers.Delete(i);
+  end;
+  end;
+
 begin
+
   with AppPython.Engine do
   begin
     if Bool(PyArg_ParseTuple(Args, 'LisLLs:dlg_proc',
@@ -9750,6 +9772,7 @@ begin
             if Form.Visible then
               Form.Hide;
             Form.Free;
+            AppFreeListTimers;
             Result:= ReturnNone;
           end;
 
